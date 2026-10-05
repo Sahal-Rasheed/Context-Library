@@ -20,13 +20,15 @@ export function LibraryView({ view, items }: LibraryViewProps) {
   }
 
   switch (view) {
-    // case "grid":
-    //   return <GridView items={items} />;
-
-    // case "compact":
-    //   return <CompactView items={items} />;
-
     case "list":
+      return <ListView items={items} />;
+
+    case "compact":
+      return <CompactView items={items} />;
+
+    case "grid":
+      return <GridView items={items} />;
+
     default:
       return <ListView items={items} />;
   }

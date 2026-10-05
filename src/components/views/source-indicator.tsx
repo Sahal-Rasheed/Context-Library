@@ -25,9 +25,11 @@ function getColorIndex(str: string): number {
 export function SourceIndicator({
   title,
   type,
+  className,
 }: {
   title: string;
   type: ContextItemType;
+  className?: string;
 }) {
   const colorIndex = getColorIndex(title);
   const colorClass = COLOR_VARIANTS[colorIndex];
@@ -35,8 +37,9 @@ export function SourceIndicator({
   return (
     <div
       className={cn(
-        "size-7.5 aspect-square flex items-center justify-center  text-xs font-semibold uppercase select-none shrink-0 rounded-md-ds",
+        "size-7.5 aspect-square flex items-center justify-center text-xs font-semibold uppercase select-none shrink-0 rounded-md-ds",
         colorClass,
+        className,
       )}
     >
       {type === "note" ? (
