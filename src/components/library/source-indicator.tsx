@@ -1,6 +1,12 @@
 import { cn } from "cn";
 import type { ContextItemType } from "@/data";
-import { MessageCircle, NotepadText, Link, Code } from "lucide-react";
+import {
+  MessageCircle,
+  NotepadText,
+  Link as LinkIcon,
+  Code,
+  Image as ImageIcon,
+} from "lucide-react";
 
 const COLOR_VARIANTS = [
   "bg-sky-500/12 text-sky-600 border border-sky-500/20 dark:bg-sky-500/10 dark:text-sky-400 dark:border-sky-500/20",
@@ -25,14 +31,41 @@ function getColorIndex(str: string): number {
 export function SourceIndicator({
   title,
   type,
+  url,
   className,
 }: {
   title: string;
   type: ContextItemType;
+  url?: string;
   className?: string;
 }) {
-  const colorIndex = getColorIndex(title);
+  const colorIndex = getColorIndex(url || title);
   const colorClass = COLOR_VARIANTS[colorIndex];
+
+  let content = null;
+
+  if (type === "link" && url) {
+    try {
+      const hostname = new URL(url).hostname.replace("www.", "");
+      if (hostname.includes("github.com")) {
+        content = "GH";
+      } else {
+        content = hostname.charAt(0).toUpperCase();
+      }
+    } catch {
+      content = <LinkIcon className="size-3.5" />;
+    }
+  } else if (type === "snippet") {
+    content = <Code className="size-3.5" />;
+  } else if (type === "note") {
+    content = <NotepadText className="size-3.5" />;
+  } else if (type === "chat") {
+    content = <MessageCircle className="size-3.5" />;
+  } else if (type === "image") {
+    content = <ImageIcon className="size-3.5" />;
+  } else {
+    content = <LinkIcon className="size-3.5" />;
+  }
 
   return (
     <div
@@ -42,15 +75,7 @@ export function SourceIndicator({
         className,
       )}
     >
-      {type === "note" ? (
-        <NotepadText className="size-3.5" />
-      ) : type === "link" ? (
-        <Link className="size-3.5" />
-      ) : type === "snippet" ? (
-        <Code className="size-3.5" />
-      ) : (
-        <MessageCircle className="size-3.5" />
-      )}
+      {content}
     </div>
   );
 }

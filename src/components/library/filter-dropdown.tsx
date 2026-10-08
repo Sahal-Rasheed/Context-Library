@@ -8,7 +8,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Code, Filter, Link, MessageCircle, NotepadText } from "lucide-react";
+import {
+  Code,
+  Filter,
+  Link,
+  MessageCircle,
+  NotepadText,
+  Image as ImageIcon,
+} from "lucide-react";
 
 type FilterDropdownMenuProps = {
   activeFilters: Record<string, boolean>;
@@ -44,6 +51,11 @@ export function FilterDropdownMenu({
       name: "AI Conversation",
       icon: <MessageCircle className="size-3.5 text-muted-foreground" />,
     },
+    {
+      type: "image",
+      name: "Image",
+      icon: <ImageIcon className="size-3.5 text-muted-foreground" />,
+    },
   ];
 
   return (
@@ -57,14 +69,14 @@ export function FilterDropdownMenu({
             <Filter className="size-3" />
             <span>Filter</span>
             {activeFilterCount > 0 && (
-              <span className="text-xs tracking-widest">
+              <span className="text-xs tracking-widest font-semibold text-primary">
                 ({activeFilterCount})
               </span>
             )}
           </Button>
         }
       />
-      <DropdownMenuContent className="min-w-45 border-sidebar-border shadow-xl">
+      <DropdownMenuContent className="min-w-48 border-sidebar-border shadow-xl">
         <DropdownMenuGroup>
           <DropdownMenuLabel className="text-xs-ds font-semibold text-muted-foreground">
             Content type
@@ -83,19 +95,10 @@ export function FilterDropdownMenu({
           ))}
         </DropdownMenuGroup>
         <DropdownMenuSeparator className="dark:bg-input" />
-        {/*<DropdownMenuGroup>
-          <DropdownMenuItem
-            className="text-xs-ds text-foreground focus:text-foreground dark:hover:bg-popover-foreground/10! hover:bg-muted/85! cursor-pointer"
-            onSelect={(e) => e.preventDefault()}
-            onClick={handleClearFilters}
-          >
-            Clear filters
-          </DropdownMenuItem>
-        </DropdownMenuGroup>*/}
         <DropdownMenuGroup>
           <Button
             variant="ghost"
-            className="flex items-center font-normal rounded-sm-ds text-xs-ds text-foreground focus:text-foreground dark:hover:bg-popover-foreground/10! hover:bg-muted/85! cursor-pointer w-full justify-start p-1 ml-0"
+            className="flex items-center font-normal rounded-sm-ds text-xs-ds text-foreground focus:text-foreground dark:hover:bg-popover-foreground/10! hover:bg-muted/85! cursor-pointer w-full justify-start p-1.5 ml-0"
             onClick={onClearFilters}
           >
             Clear filters

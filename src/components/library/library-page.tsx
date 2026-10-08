@@ -1,4 +1,4 @@
-import LibraryToolbar from "../toolbar";
+import LibraryToolbar from "./library-toolbar";
 
 type LibraryPageProps = {
   title: string;
@@ -16,7 +16,6 @@ export function LibraryPage({
   return (
     <div className="mt-2.5 mb-10">
       <LibraryToolbar title={title} count={count} view={view} />
-
       {children}
     </div>
   );

@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Newsreader } from "next/font/google";
 import "./globals.css";
 
-import SideBar from "@/components/sidebar/sidebar";
-import NavBar from "@/components/navbar";
+import Sidebar from "@/components/layout/sidebar";
+import Navbar from "@/components/layout/navbar";
 import { ThemeProvider } from "@/components/theme-provider";
 import { SidebarProvider } from "@/context/sidebar-context";
 
@@ -48,11 +48,11 @@ export default function RootLayout({
           <SidebarProvider>
             <div className="grid grid-cols-1 md:grid-cols-[auto_1fr] h-screen w-full overflow-hidden">
               {/* sidebar */}
-              <SideBar />
+              <Sidebar />
 
               {/* right column */}
               <div className="flex flex-col h-full min-h-0 min-w-0 overflow-hidden">
-                <NavBar />
+                <Navbar />
                 <main className="flex-1 min-h-0 overflow-y-auto scrollbar-thin scrollbar-thumb-muted">
                   <div className="mx-auto w-full max-w-6xl px-6">
                     {children}

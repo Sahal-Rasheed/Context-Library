@@ -1,7 +1,6 @@
 "use client";
 
-import * as React from "react";
-
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -13,10 +12,20 @@ import {
 import { SortDesc } from "lucide-react";
 
 export function SortDropdownMenu() {
-  const [activeSort, setActiveSort] = React.useState<string>("latest");
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const activeSort = searchParams.get("sort") ?? "latest";
 
   const handleSortChange = (type: string) => {
-    setActiveSort(type);
+    const params = new URLSearchParams(searchParams.toString());
+    if (type === "latest") {
+      params.delete("sort");
+    } else {
+      params.set("sort", type);
+    }
+    router.replace(`${pathname}?${params.toString()}`);
   };
 
   const sortOptions = [
