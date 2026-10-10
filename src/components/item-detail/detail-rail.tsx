@@ -32,13 +32,13 @@ export function DetailRail({ item }: DetailRailProps) {
   });
 
   return (
-    <aside className="space-y-6 text-sm divide-y divide-border lg:divide-y-0">
-      {/* 1. Details Table */}
-      <section className="space-y-3 pt-4 lg:pt-0">
+    <aside className="space-y-4 lg:mt-10 text-sm lg:divide-y lg:divide-border">
+      {/* details */}
+      <section className="flex flex-col gap-3 pb-4 pt-4 lg:pt-0">
         <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
           Details
         </h2>
-        <dl className="grid grid-cols-[80px_1fr] gap-y-2 text-xs">
+        <dl className="grid grid-cols-[80px_1fr] gap-y-3 gap-x-2 text-xs">
           <dt className="text-muted-foreground">Content</dt>
           <dd className="font-medium text-foreground capitalize">
             {item.type}
@@ -84,8 +84,8 @@ export function DetailRail({ item }: DetailRailProps) {
         </dl>
       </section>
 
-      {/* 2. Attachments Section */}
-      <section className="space-y-3 pt-6">
+      {/* attachments */}
+      {/*<section className="space-y-3">
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
@@ -144,10 +144,10 @@ export function DetailRail({ item }: DetailRailProps) {
             No attachments yet.
           </p>
         )}
-      </section>
+      </section>*/}
 
-      {/* 3. Connected Items (Linked by you) */}
-      <section className="space-y-3 pt-6">
+      {/* connected */}
+      {/*<section className="space-y-3 pt-6">
         <div>
           <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
             Connected
@@ -185,18 +185,18 @@ export function DetailRail({ item }: DetailRailProps) {
             No connected links.
           </p>
         )}
-      </section>
+      </section>*/}
 
-      {/* 4. Related Items (Suggested) */}
-      <section className="space-y-3 pt-6">
+      {/* related ttems (suggested) */}
+      <section className="space-y-3">
         <div>
           <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
             Related
           </h2>
-          <p className="text-[11px] text-muted-foreground">Suggested</p>
+          <p className="text-xs-ds text-muted-foreground">Suggested</p>
         </div>
 
-        <div className="space-y-2.5">
+        <div className="space-y-3">
           {relatedItems.map((rel) => {
             const sharedTags = rel.tags.filter((t) => item.tags.includes(t));
             return (
@@ -212,10 +212,10 @@ export function DetailRail({ item }: DetailRailProps) {
                   className="size-5 text-[10px] mt-0.5"
                 />
                 <div className="min-w-0 flex-1">
-                  <p className="text-xs font-medium text-foreground group-hover:text-primary transition-colors truncate">
+                  <p className="text-xs font-medium text-foreground group-hover:underline underline-offset-2 transition-colors truncate pb-0.5">
                     {rel.title}
                   </p>
-                  <p className="text-[11px] text-muted-foreground truncate">
+                  <p className="text-xs-ds text-muted-foreground truncate">
                     {sharedTags.length > 0
                       ? `Shares ${sharedTags.map((t) => `#${t}`).join(" ")}`
                       : `Same folder (${rel.folder})`}

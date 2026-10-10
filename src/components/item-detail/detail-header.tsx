@@ -9,7 +9,7 @@ import {
   MoreHorizontal,
   Folder,
   Plus,
-  X,
+  // X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -27,19 +27,19 @@ export function DetailHeader({ item }: DetailHeaderProps) {
     : "All items";
 
   return (
-    <div className="space-y-4">
-      {/* Breadcrumb back button */}
+    <div className="space-y-3">
+      {/* back button */}
       <div>
         <Link
           href={backHref}
-          className="inline-flex items-center gap-1.5 text-xs-ds text-muted-foreground hover:text-foreground transition-colors group"
+          className="inline-flex items-center gap-1.5 text-md-ds  text-muted-foreground hover:text-foreground font-medium transition-colors group rounded-sm-ds px-1.5 py-0.5 dark:hover:bg-muted/50 hover:bg-muted"
         >
           <ArrowLeft className="size-3.5 transition-transform group-hover:-translate-x-0.5" />
           <span>{backLabel}</span>
         </Link>
       </div>
 
-      {/* Source URL & indicator */}
+      {/* source & indicator */}
       <div className="flex items-center gap-2 text-xs font-mono text-muted-foreground">
         <SourceIndicator
           title={item.title}
@@ -52,7 +52,7 @@ export function DetailHeader({ item }: DetailHeaderProps) {
             href={item.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="hover:underline hover:text-foreground truncate"
+            className="underline-offset-3 hover:underline hover:text-foreground truncate"
           >
             {item.url.replace(/^https?:\/\/(www\.)?/, "")}
           </a>
@@ -61,16 +61,21 @@ export function DetailHeader({ item }: DetailHeaderProps) {
         )}
       </div>
 
-      {/* Item Title */}
+      {/* title */}
       <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-foreground">
         {item.title}
       </h1>
 
-      {/* Action Buttons */}
-      <div className="flex items-center gap-2 flex-wrap pt-1">
+      {/* action buttons */}
+      <div className="flex items-center gap-2 flex-wrap">
         {item.url && (
-          <Button className="h-8 gap-1.5 px-3 text-xs font-semibold bg-foreground text-background hover:bg-foreground/90">
-            <a href={item.url} target="_blank" rel="noopener noreferrer">
+          <Button className="px-3 text-xs font-medium bg-foreground text-background hover:bg-foreground/90">
+            <a
+              href={item.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex justify-center gap-1.5"
+            >
               <ExternalLink className="size-3.5" />
               <span>Open original</span>
             </a>
@@ -79,7 +84,7 @@ export function DetailHeader({ item }: DetailHeaderProps) {
 
         <Button
           variant="outline"
-          className="h-8 gap-1.5 px-3 text-xs font-medium"
+          className="flex justify-center gap-1.5 px-3 text-xs font-medium"
         >
           <Star className={`size-3.5 ${item.fav ? "fill-foreground" : ""}`} />
           <span>{item.fav ? "Favorited" : "Favorite"}</span>
@@ -87,7 +92,7 @@ export function DetailHeader({ item }: DetailHeaderProps) {
 
         <Button
           variant="outline"
-          className="h-8 gap-1.5 px-3 text-xs font-medium"
+          className="flex justify-center gap-1.5 px-3 text-xs font-medium"
         >
           <Archive className="size-3.5" />
           <span>Archive</span>
@@ -96,45 +101,45 @@ export function DetailHeader({ item }: DetailHeaderProps) {
         <Button
           variant="outline"
           size="icon"
-          className="h-8 w-8"
+          className="flex justify-center px-3 text-xs font-medium"
           title="More actions"
         >
           <MoreHorizontal className="size-4" />
         </Button>
       </div>
 
-      {/* Organization: Folder pill & Tag chips */}
-      <div className="flex items-center gap-2 flex-wrap pt-1 pb-2">
+      {/* folder pill & tag chips */}
+      <div className="flex items-center gap-2 flex-wrap pt-0.5">
         {item.folder && (
           <Badge
             variant="outline"
-            className="bg-card text-foreground border-border rounded-sm-ds text-xs flex items-center gap-1.5 py-1 px-2.5 capitalize"
+            className="bg-card text-foreground border-border rounded-sm-ds text-md-ds flex items-center gap-1.5 py-3 px capitalize"
           >
-            <Folder className="size-3 text-muted-foreground" />
+            <Folder className="size-3.5 text-muted-foreground" />
             <span>{item.folder}</span>
           </Badge>
         )}
 
-        <div className="h-4 w-px bg-border mx-1" />
+        <div className="h-4 w-px bg-input mx-1" />
 
         {item.tags.map((tag) => (
           <Badge
             key={tag}
             variant="secondary"
-            className="dark:bg-black/75 bg-neutral-400/10 text-xs rounded-sm-ds text-muted-foreground flex items-center gap-1 py-1 px-2 hover:bg-muted"
+            className="dark:bg-black/75 bg-neutral-400/10 text-xs-ds rounded-sm-ds text-muted-foreground dark:hover:bg-muted hover:bg-neutral-400/40 hover:text-foreground"
           >
-            <span>#{tag}</span>
-            <X className="size-3 hover:text-foreground cursor-pointer" />
+            #{tag}
           </Badge>
         ))}
 
-        <button
-          type="button"
-          className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground px-2 py-1 rounded border border-dashed border-border hover:border-input transition-colors"
+        <Button
+          variant="outline"
+          size="xs"
+          className="h-5.5 inline-flex items-center gap-1 dark:bg-black/75  bg-neutral-400/10 text-muted-foreground dark:hover:bg-muted hover:bg-neutral-400/40 hover:text-foreground rounded border border-dashed border-border transition-colors cursor-pointer"
         >
           <Plus className="size-3" />
           <span>Tag</span>
-        </button>
+        </Button>
       </div>
     </div>
   );

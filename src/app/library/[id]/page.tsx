@@ -31,10 +31,10 @@ export default async function ItemDetailPage({
   }
 
   return (
-    <div className="py-6 pb-20">
-      {/* 2-column layout: Main content on left, info rail on right */}
-      <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_290px] gap-8 xl:gap-12 items-start">
-        {/* Left main area */}
+    <section className="py-6 pb-20">
+      {/* 2-column layout */}
+      <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_290px] gap-3 lg:gap-8 xl:gap-12 items-start">
+        {/* left side main area */}
         <div className="min-w-0">
           <DetailHeader item={item} />
           <DetailContextCard
@@ -45,11 +45,11 @@ export default async function ItemDetailPage({
           <DetailContent item={item} />
         </div>
 
-        {/* Right side info rail */}
-        <div className="lg:border-l lg:border-border lg:pl-8">
+        {/* right side info rail */}
+        <div className="lg:pl-7.5">
           <DetailRail item={item} />
         </div>
       </div>
-    </div>
+    </section>
   );
 }
