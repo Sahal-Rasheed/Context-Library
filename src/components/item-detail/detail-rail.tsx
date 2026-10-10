@@ -1,6 +1,4 @@
 import Link from "next/link";
-import { Plus, X, Image as ImageIcon, FileText } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { SourceIndicator } from "@/components/library/source-indicator";
 import type { ContextItem } from "@/data";
 import { contextItems } from "@/data";
@@ -10,12 +8,10 @@ interface DetailRailProps {
 }
 
 export function DetailRail({ item }: DetailRailProps) {
-  // Find connected items
-  const connectedItems = (item.connectedIds || [])
-    .map((id) => contextItems.find((i) => i.id === id))
-    .filter(Boolean) as ContextItem[];
+  // const connectedItems = (item.connectedIds || [])
+  //   .map((id) => contextItems.find((i) => i.id === id))
+  //   .filter(Boolean) as ContextItem[];
 
-  // Find related items (items sharing tags or in same folder, excluding current item)
   const relatedItems = contextItems
     .filter((i) => i.id !== item.id)
     .filter((i) => {

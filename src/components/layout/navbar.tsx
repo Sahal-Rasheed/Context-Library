@@ -6,6 +6,7 @@ import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { useSidebar } from "@/context/sidebar-context";
 import { useRouter, useSearchParams } from "next/navigation";
+import { LibraryModal } from "../library/library-modal";
 
 export default function Navbar() {
   const { toggleSidebar } = useSidebar();
@@ -16,8 +17,10 @@ export default function Navbar() {
   const inputRef = React.useRef<HTMLInputElement>(null);
 
   const [query, setQuery] = React.useState(searchParams.get("q") || "");
+  const [isLibraryModalOpen, setIsLibraryModalOpen] = React.useState(false);
 
   // press "/" to focus search
+  // press "C" to open library modal
   React.useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (
@@ -28,10 +31,23 @@ export default function Navbar() {
         e.preventDefault();
         inputRef.current?.focus();
       }
+
+      if (
+        e.key.toLowerCase() === "c" &&
+        document.activeElement?.tagName !== "INPUT" &&
+        document.activeElement?.tagName !== "TEXTAREA"
+      ) {
+        e.preventDefault();
+        setIsLibraryModalOpen(true);
+      }
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
+
+  const handleLibraryModalClose = () => {
+    setIsLibraryModalOpen(true);
+  };
 
   const handleSearchSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -81,7 +97,10 @@ export default function Navbar() {
       {/* action buttons */}
       <div className="flex items-center gap-2">
         <ThemeToggle />
-        <Button className="h-8 gap-1.5 px-3 text-xs font-semibold">
+        <Button
+          className="h-8 gap-1.5 px-3 text-xs font-semibold"
+          onClick={handleLibraryModalClose}
+        >
           <Plus className="size-3.5" />
           <span>Save</span>
           <kbd className="ml-1 text-[10px] font-medium px-1.5 py-0.5 rounded border border-input">
@@ -89,6 +108,13 @@ export default function Navbar() {
           </kbd>
         </Button>
       </div>
+
+      {/* library modal
+      {/* no need of condition since we are using the modal as a controlled component and we are handling open or not via props automatically via shadcn */}
+      <LibraryModal
+        open={isLibraryModalOpen}
+        onOpenChange={setIsLibraryModalOpen}
+      />
     </header>
   );
 }

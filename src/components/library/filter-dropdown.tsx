@@ -1,3 +1,4 @@
+import { Filter } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -8,14 +9,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  Code,
-  Filter,
-  Link,
-  MessageCircle,
-  NotepadText,
-  Image as ImageIcon,
-} from "lucide-react";
+import { CONTENT_TYPES } from "./library-page";
 
 type FilterDropdownMenuProps = {
   activeFilters: Record<string, boolean>;
@@ -30,34 +24,6 @@ export function FilterDropdownMenu({
   onClearFilters,
   activeFilterCount,
 }: FilterDropdownMenuProps) {
-  const contentTypes = [
-    {
-      type: "link",
-      name: "Link",
-      icon: <Link className="size-3.5 text-muted-foreground" />,
-    },
-    {
-      type: "snippet",
-      name: "Snippet",
-      icon: <Code className="size-3.5 text-muted-foreground" />,
-    },
-    {
-      type: "note",
-      name: "Note",
-      icon: <NotepadText className="size-3.5 text-muted-foreground" />,
-    },
-    {
-      type: "chat",
-      name: "AI Conversation",
-      icon: <MessageCircle className="size-3.5 text-muted-foreground" />,
-    },
-    {
-      type: "image",
-      name: "Image",
-      icon: <ImageIcon className="size-3.5 text-muted-foreground" />,
-    },
-  ];
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
@@ -82,7 +48,7 @@ export function FilterDropdownMenu({
             Content type
           </DropdownMenuLabel>
 
-          {contentTypes.map((type) => (
+          {CONTENT_TYPES.map((type) => (
             <DropdownMenuCheckboxItem
               key={type.name}
               className="flex items-center gap-2 rounded-sm-ds text-xs-ds text-foreground focus:text-foreground dark:hover:bg-popover-foreground/10! hover:bg-muted/85! cursor-pointer"
