@@ -33,6 +33,7 @@ export default function Navbar() {
       }
 
       if (
+        e.key &&
         e.key.toLowerCase() === "c" &&
         document.activeElement?.tagName !== "INPUT" &&
         document.activeElement?.tagName !== "TEXTAREA"

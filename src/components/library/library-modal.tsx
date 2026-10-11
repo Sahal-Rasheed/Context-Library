@@ -19,6 +19,8 @@ import { CONTENT_TYPES } from "./library-page";
 import type { ContextItemType } from "@/data";
 import { cn } from "cn";
 import { Textarea } from "../ui/textarea";
+import { FolderCombobox } from "./folder-combobox";
+import { TagsInput } from "./tags-input";
 
 type LibraryModalProps = {
   open: boolean;
@@ -42,7 +44,7 @@ export function LibraryModal({ open, onOpenChange }: LibraryModalProps) {
         {/*<DialogTrigger
           render={<Button variant="outline">Open Dialog</Button>}
         />*/}
-        <DialogContent className="sm:max-w-fit rounded-md-ds border border-sidebar-border bg-sidebar text-foreground">
+        <DialogContent className="max-w-[90%] sm:max-w-xl md:max-w-2xl lg:max-w-3xl max-h-[90%] sm:max-h-fit rounded-md-ds border border-sidebar-border bg-sidebar text-foreground overflow-y-auto scrollbar-thin scrollbar-thumb-muted">
           <DialogHeader>
             <DialogTitle className="font-semibold text-base-ds">
               Save to library
@@ -53,10 +55,11 @@ export function LibraryModal({ open, onOpenChange }: LibraryModalProps) {
           </DialogHeader>
 
           {/* content choices for ctx saving */}
-          <div className="flex items-center gap-2 mb-4">
+          <div className="flex flex-wrap items-center gap-2 mb-4">
             {CONTENT_TYPES.map((type) => (
               <Button
                 key={type.type}
+                type="button"
                 variant="outline"
                 className={cn(
                   "inline-flex items-center rounded-md-ds text-xs h-0 py-3.5 px-2.5 gap-1.5",
@@ -180,12 +183,13 @@ export function LibraryModal({ open, onOpenChange }: LibraryModalProps) {
                 >
                   Folder
                 </FieldLabel>
-                <Input
+                {/*<Input
                   id="ctx-lib-folder"
                   name="ctx-lib-folder"
                   placeholder="Add to a folder"
                   className="text-xs-ds rounded-sm-ds focus:outline-none focus:ring-1! focus:ring-accent! placeholder:text-xs-ds placeholder:tracking-wide placeholder:text-muted-foreground"
-                />
+                />*/}
+                <FolderCombobox />
               </Field>
 
               <Field>
@@ -195,17 +199,18 @@ export function LibraryModal({ open, onOpenChange }: LibraryModalProps) {
                 >
                   Tags
                 </FieldLabel>
-                <Input
+                {/*<Input
                   id="ctx-lib-tags"
                   name="ctx-lib-tags"
                   placeholder="Add tags (comma separated)"
                   className="text-xs-ds rounded-sm-ds focus:outline-none focus:ring-1! focus:ring-accent! placeholder:text-xs-ds placeholder:tracking-wide placeholder:text-muted-foreground"
-                />
+                />*/}
+                <TagsInput />
               </Field>
             </div>
           </FieldGroup>
 
-          <DialogFooter>
+          <DialogFooter className="p-4 border-t border-input">
             <DialogClose render={<Button variant="outline">Cancel</Button>} />
             <Button type="submit">Save changes</Button>
           </DialogFooter>

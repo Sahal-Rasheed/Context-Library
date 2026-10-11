@@ -30,11 +30,11 @@ export function DetailRail({ item }: DetailRailProps) {
   return (
     <aside className="space-y-4 lg:mt-10 text-sm lg:divide-y lg:divide-border">
       {/* details */}
-      <section className="flex flex-col gap-3 pb-4 pt-4 lg:pt-0">
+      <section className="flex flex-col gap-3 lg:gap-3 pb-4 pt-4 lg:pt-0">
         <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
           Details
         </h2>
-        <dl className="grid grid-cols-[80px_1fr] gap-y-3 gap-x-2 text-xs">
+        <dl className="grid grid-cols-[80px_1fr] gap-y-3 gap-x-8 lg:gap-x-2 text-xs">
           <dt className="text-muted-foreground">Content</dt>
           <dd className="font-medium text-foreground capitalize">
             {item.type}

@@ -22,6 +22,7 @@ export function DetailContextCard({
   React.useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (
+        e.key &&
         e.key.toLowerCase() === "e" &&
         document.activeElement?.tagName !== "INPUT" &&
         document.activeElement?.tagName !== "TEXTAREA"
