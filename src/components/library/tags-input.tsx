@@ -9,38 +9,28 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 
 interface TagsInputProps {
-  name?: string;
-  value?: string[];
-  onChange?: (tags: string[]) => void;
+  value: string[];
+  onChange: (tags: string[]) => void;
+  disabled: boolean;
   placeholder?: string;
   className?: string;
-  disabled?: boolean;
 }
 
 export function TagsInput({
-  value,
+  value = [],
   onChange,
   placeholder = "Add tags (comma separated)",
   className,
   disabled = false,
 }: TagsInputProps) {
-  const [internalTags, setInternalTags] = React.useState<string[]>([]);
   const [inputValue, setInputValue] = React.useState("");
 
-  const tags = value ?? internalTags;
-
-  const updateTags = (nextTags: string[]) => {
-    if (value === undefined) {
-      setInternalTags(nextTags);
-    }
-
-    onChange?.(nextTags);
-  };
+  const tags = value ?? [];
 
   const addTags = (text: string) => {
     const newTags = text
       .split(",")
-      .map((tag) => tag.trim())
+      .map((tag) => tag.trim().replace(/^#/, ""))
       .filter(Boolean);
 
     if (newTags.length === 0) return;
@@ -49,26 +39,23 @@ export function TagsInput({
 
     const uniqueTags = newTags.filter((tag) => {
       const key = tag.toLowerCase();
-
       if (existing.has(key)) return false;
-
       existing.add(key);
       return true;
     });
 
     if (uniqueTags.length > 0) {
-      updateTags([...tags, ...uniqueTags]);
+      onChange?.([...tags, ...uniqueTags]);
     }
   };
 
   const removeTag = (index: number) => {
-    updateTags(tags.filter((_, i) => i !== index));
+    onChange?.(tags.filter((_, i) => i !== index));
   };
 
   const handleChange = (text: string) => {
     if (text.includes(",")) {
       const parts = text.split(",");
-
       addTags(parts.slice(0, -1).join(","));
       setInputValue(parts[parts.length - 1]);
     } else {
@@ -79,8 +66,10 @@ export function TagsInput({
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
       event.preventDefault();
-      addTags(inputValue);
-      setInputValue("");
+      if (inputValue.trim()) {
+        addTags(inputValue);
+        setInputValue("");
+      }
     }
 
     if (event.key === "Backspace" && inputValue === "" && tags.length > 0) {
@@ -107,17 +96,6 @@ export function TagsInput({
         event.currentTarget.querySelector("input")?.focus();
       }}
     >
-      {/* Hidden form values */}
-      {/*{tags.map((tag, index) => (
-        <input
-          key={`form-${index}`}
-          type="hidden"
-          name={name}
-          value={tag}
-          disabled={disabled}
-        />
-      ))}*/}
-
       {/* tag chips */}
       {tags.map((tag, index) => (
         <Badge
@@ -147,6 +125,7 @@ export function TagsInput({
 
       {/* typing area */}
       <Input
+        id="tags-input"
         value={inputValue}
         disabled={disabled}
         onChange={(event) => handleChange(event.target.value)}

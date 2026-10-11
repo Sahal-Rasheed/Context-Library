@@ -1,3 +1,6 @@
+"use client";
+
+import { Folder } from "lucide-react";
 import {
   Combobox,
   ComboboxContent,
@@ -6,40 +9,42 @@ import {
   ComboboxItem,
   ComboboxList,
 } from "@/components/ui/combobox";
-import { Folder } from "lucide-react";
 
-const frameworks = [
-  "Next.js",
-  "SvelteKit",
-  "Nuxt.js",
-  "Remix",
-  "Astro",
-  "Create React App",
-  "Vite",
-  "Gatsby",
-  "SolidStart",
-  "Qwik",
-  "Eleventy",
-  "Laravel",
-  "Django",
-  "Rails",
-  "Express",
-  "NestJS",
-  "Flask",
-  "Spring Boot",
-  "Symfony",
-  "Phoenix",
+const DEFAULT_FOLDERS = [
+  "Frontend",
+  "Data & Backend",
+  "Architecture",
+  "Tooling & DX",
+  "Learning",
 ] as const;
 
-export function FolderCombobox() {
+interface FolderComboboxProps {
+  value?: string;
+  onChange?: (value: string | null) => void;
+  disabled?: boolean;
+}
+
+export function FolderCombobox({
+  value = "",
+  onChange,
+  disabled = false,
+}: FolderComboboxProps) {
   return (
-    <Combobox items={frameworks}>
+    <Combobox
+      items={DEFAULT_FOLDERS}
+      value={value || null}
+      onValueChange={(val) => {
+        onChange?.(val);
+      }}
+      disabled={disabled}
+    >
       <ComboboxInput
+        id="folder"
         placeholder="Select a folder"
         className="min-h-10.5 text-xs-ds rounded-sm-ds placeholder:text-xs-ds placeholder:tracking-wide placeholder:text-muted-foreground"
       />
       <ComboboxContent className="w-55.75" sideOffset={10}>
-        <ComboboxEmpty>No items found.</ComboboxEmpty>
+        <ComboboxEmpty>No folders found.</ComboboxEmpty>
         <ComboboxList>
           {(item) => (
             <ComboboxItem

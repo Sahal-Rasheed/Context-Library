@@ -46,7 +46,7 @@ export default function Navbar() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
-  const handleLibraryModalClose = () => {
+  const handleLibraryModalOpen = () => {
     setIsLibraryModalOpen(true);
   };
 
@@ -100,7 +100,7 @@ export default function Navbar() {
         <ThemeToggle />
         <Button
           className="h-8 gap-1.5 px-3 text-xs font-semibold"
-          onClick={handleLibraryModalClose}
+          onClick={handleLibraryModalOpen}
         >
           <Plus className="size-3.5" />
           <span>Save</span>
