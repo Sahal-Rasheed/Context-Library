@@ -1,33 +1,18 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Newsreader } from "next/font/google";
-import "./globals.css";
 
-import Sidebar from "@/components/layout/sidebar";
+import "../globals.css";
 import Navbar from "@/components/layout/navbar";
-import { ThemeProvider } from "@/components/theme-provider";
+import Sidebar from "@/components/layout/sidebar";
 import { SidebarProvider } from "@/context/sidebar-context";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
-const newsreader = Newsreader({
-  variable: "--font-newsreader",
-  subsets: ["latin"],
-});
+import { ThemeProvider } from "@/components/theme-provider";
+import { geistSans, geistMono, newsreader } from "@/lib/fonts";
 
 export const metadata: Metadata = {
-  title: "Context Library",
-  description: "Context Library application",
+  title: "Context Library | Dashboard",
+  description: "Context Library application dashboard",
 };
 
-export default function RootLayout({
+export default function MainRootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;

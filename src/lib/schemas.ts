@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+// LIBRARY
+
 const baseItemSchema = z.object({
   title: z
     .string()
@@ -33,3 +35,31 @@ export const itemFormSchema = z.discriminatedUnion("type", [
 ]);
 
 export type ItemFormData = z.infer<typeof itemFormSchema>;
+
+// AUTH
+
+export const registrationSchema = z
+  .object({
+    name: z
+      .string()
+      .min(2, { error: "Name must be at least 2 characters long." }),
+    email: z.email({ error: "Invalid email address." }),
+    password: z
+      .string()
+      .min(8, { error: "Password must be at least 8 characters long." })
+      .max(128, { error: "Password must be at most 128 characters long." }),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match.",
+    path: ["confirmPassword"], // path to the field that caused the error
+  });
+
+export type RegistrationFormData = z.infer<typeof registrationSchema>;
+
+export const loginSchema = z.object({
+  email: z.email({ error: "Invalid email address." }),
+  password: z.string().min(1, { error: "Password is required." }),
+});
+
+export type LoginFormData = z.infer<typeof loginSchema>;

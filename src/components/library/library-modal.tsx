@@ -27,7 +27,7 @@ import type { ContextItemType } from "@/data";
 import { Textarea } from "../ui/textarea";
 import { FolderCombobox } from "./folder-combobox";
 import { TagsInput } from "./tags-input";
-import { itemFormSchema, type ItemFormData } from "@/types/schemas";
+import { itemFormSchema, type ItemFormData } from "@/lib/schemas";
 import { cn } from "cn";
 
 type LibraryModalProps = {
@@ -44,7 +44,7 @@ export function LibraryModal({ open, onOpenChange }: LibraryModalProps) {
     control,
     reset,
     setValue,
-    setError,
+    // setError,
     formState: { errors, isSubmitting },
   } = useForm<ItemFormData>({
     resolver: zodResolver(itemFormSchema),
