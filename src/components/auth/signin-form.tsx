@@ -15,12 +15,15 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { loginSchema, type LoginFormData } from "@/lib/schemas";
-import { signInWithEmail } from "@/actions/auth";
+import { signInWithEmail, signInAsGuest } from "@/actions/auth";
+import { useTransition } from "react";
 
 export function SigninForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+  const [isPending, startTransition] = useTransition();
+
   const {
     register,
     handleSubmit,
@@ -47,6 +50,19 @@ export function SigninForm({
       });
     }
   }
+
+  // async function handleGuestLogin() {
+  //   await signInAsGuest();
+  // } // or
+
+  const handleGuestLogin = () => {
+    // using startTransition so we get pending state, or else we would have to use RHF
+    startTransition(async () => {
+      await signInAsGuest();
+    });
+  };
+
+  const isLoginPending = isPending || isSubmitting;
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
@@ -134,9 +150,19 @@ export function SigninForm({
                 <Button
                   type="submit"
                   className="rounded-sm-ds"
-                  disabled={isSubmitting}
+                  disabled={isLoginPending}
                 >
                   {isSubmitting ? "Signing in..." : "Sign in"}
+                </Button>
+
+                <Button
+                  variant="outline"
+                  type="button"
+                  onClick={handleGuestLogin}
+                  disabled={isLoginPending}
+                  className="rounded-sm-ds my-1.5"
+                >
+                  {isPending ? "Signing in as guest..." : "Continue as Guest"}
                 </Button>
                 <FieldDescription className="text-center">
                   Don&apos;t have an account?{" "}

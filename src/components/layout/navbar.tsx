@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { useSidebar } from "@/context/sidebar-context";
 import { useRouter, useSearchParams } from "next/navigation";
 import { LibraryModal } from "../library/library-modal";
+import { AvatarDropdown } from "../user/avatar-dropdown";
 
 export default function Navbar() {
   const { toggleSidebar } = useSidebar();
@@ -96,7 +97,7 @@ export default function Navbar() {
       </form>
 
       {/* action buttons */}
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2.5">
         <ThemeToggle />
         <Button
           className="h-8 gap-1.5 px-3 text-xs font-semibold"
@@ -108,6 +109,7 @@ export default function Navbar() {
             C
           </kbd>
         </Button>
+        <AvatarDropdown />
       </div>
 
       {/* library modal

@@ -1,5 +1,6 @@
 "use server";
 
+import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { isAPIError } from "better-auth/api";
 
@@ -98,4 +99,58 @@ export async function signInWithEmail(
   }
 
   redirect("/");
+}
+
+export async function signOut() {
+  await auth.api.signOut({
+    headers: await headers(),
+  });
+
+  redirect("/signin");
+}
+
+export async function signInAsGuest(): Promise<{
+  success: false;
+  message: string;
+} | void> {
+  try {
+    await auth.api.signInAnonymous();
+    console.log("Guest login successful");
+  } catch (error) {
+    if (isAPIError(error)) {
+      console.warn("Guest login rejected:", error.status);
+
+      return {
+        success: false,
+        message: "Unable to log in as guest. Please try again later.",
+      };
+    }
+
+    console.error("Unexpected guest login failure:", error);
+
+    return {
+      success: false,
+      message: "Something went wrong. Please try again later.",
+    };
+  }
+
+  redirect("/");
+}
+
+export async function getCurrentSession() {
+  try {
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
+
+    return session;
+  } catch (error) {
+    if (isAPIError(error)) {
+      console.warn("Get session rejected:", error.status);
+      return null;
+    }
+
+    console.error("Unexpected get session failure:", error);
+    return null;
+  }
 }
