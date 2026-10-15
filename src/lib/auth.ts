@@ -1,8 +1,9 @@
 import { betterAuth } from "better-auth";
-import { anonymous } from "better-auth/plugins";
 import { prismaAdapter } from "better-auth/adapters/prisma";
-import { prisma } from "@/lib/prisma";
 import { nextCookies } from "better-auth/next-js";
+import { anonymous } from "better-auth/plugins";
+
+import { prisma } from "@/lib/prisma";
 
 export const auth = betterAuth({
   advanced: {

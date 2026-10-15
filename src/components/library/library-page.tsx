@@ -1,13 +1,8 @@
-import {
-  Code,
-  Link,
-  MessageCircle,
-  NotepadText,
-  Image as ImageIcon,
-} from "lucide-react";
+import { Code, Link, MessageCircle, NotepadText, Image as ImageIcon } from "lucide-react";
+
+import type { ContextItemType } from "@/data";
 
 import LibraryToolbar from "./library-toolbar";
-import type { ContextItemType } from "@/data";
 
 export const CONTENT_TYPES: {
   type: ContextItemType;
@@ -48,12 +43,7 @@ type LibraryPageProps = {
   children: React.ReactNode;
 };
 
-export function LibraryPage({
-  title,
-  count,
-  view,
-  children,
-}: LibraryPageProps) {
+export function LibraryPage({ title, count, view, children }: LibraryPageProps) {
   return (
     <div className="mt-2.5 mb-10">
       <LibraryToolbar title={title} count={count} view={view} />

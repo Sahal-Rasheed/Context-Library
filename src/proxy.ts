@@ -6,10 +6,7 @@ const protectedRoutes = ["/", "/library"];
 const publicRoutes = ["/signin", "/signup"];
 
 function matchesRoute(path: string, routes: string[]) {
-  return routes.some(
-    (route) =>
-      path === route || (route !== "/" && path.startsWith(`${route}/`)),
-  );
+  return routes.some((route) => path === route || (route !== "/" && path.startsWith(`${route}/`)));
 }
 
 export default function proxy(request: NextRequest) {

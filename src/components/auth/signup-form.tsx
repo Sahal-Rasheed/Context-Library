@@ -1,32 +1,18 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { cn } from "cn";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 
-import { cn } from "cn";
+import { signUpWithEmail } from "@/actions/auth";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  Field,
-  FieldDescription,
-  FieldGroup,
-  FieldLabel,
-} from "@/components/ui/field";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Field, FieldDescription, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { registrationSchema, type RegistrationFormData } from "@/lib/schemas";
-import { signUpWithEmail } from "@/actions/auth";
 
-export function SignupForm({
-  className,
-  ...props
-}: React.ComponentProps<"div">) {
+export function SignupForm({ className, ...props }: React.ComponentProps<"div">) {
   const {
     register,
     handleSubmit,
@@ -61,9 +47,7 @@ export function SignupForm({
       <Card>
         <CardHeader className="text-center">
           <CardTitle className="text-xl">Create your account</CardTitle>
-          <CardDescription>
-            Enter your email below to create your account
-          </CardDescription>
+          <CardDescription>Enter your email below to create your account</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)}>
@@ -74,14 +58,12 @@ export function SignupForm({
                   id="name"
                   type="text"
                   placeholder="John Doe"
-                  className="text-xs-ds rounded-sm-ds focus:outline-none focus:ring-1! focus:ring-accent! placeholder:tracking-wide placeholder:text-muted-foreground"
+                  className="rounded-sm-ds text-xs-ds placeholder:tracking-wide placeholder:text-muted-foreground focus:ring-1! focus:ring-accent! focus:outline-none"
                   required
                   {...register("name")}
                 />
                 {errors.name && (
-                  <span className="text-xs text-destructive mt-1">
-                    {errors.name.message}
-                  </span>
+                  <span className="mt-1 text-xs text-destructive">{errors.name.message}</span>
                 )}
               </Field>
               <Field>
@@ -90,14 +72,12 @@ export function SignupForm({
                   id="email"
                   type="email"
                   placeholder="jhon@example.com"
-                  className="text-xs-ds rounded-sm-ds focus:outline-none focus:ring-1! focus:ring-accent! placeholder:tracking-wide placeholder:text-muted-foreground"
+                  className="rounded-sm-ds text-xs-ds placeholder:tracking-wide placeholder:text-muted-foreground focus:ring-1! focus:ring-accent! focus:outline-none"
                   required
                   {...register("email")}
                 />
                 {errors.email && (
-                  <span className="text-xs text-destructive mt-1">
-                    {errors.email.message}
-                  </span>
+                  <span className="mt-1 text-xs text-destructive">{errors.email.message}</span>
                 )}
               </Field>
               <Field>
@@ -107,43 +87,37 @@ export function SignupForm({
                     <Input
                       id="password"
                       type="password"
-                      className="text-xs-ds rounded-sm-ds focus:outline-none focus:ring-1! focus:ring-accent!"
+                      className="rounded-sm-ds text-xs-ds focus:ring-1! focus:ring-accent! focus:outline-none"
                       required
                       {...register("password")}
                     />
                     {errors.password && (
-                      <span className="text-xs text-destructive mt-1">
+                      <span className="mt-1 text-xs text-destructive">
                         {errors.password.message}
                       </span>
                     )}
                   </Field>
                   <Field>
-                    <FieldLabel htmlFor="confirmPassword">
-                      Confirm Password
-                    </FieldLabel>
+                    <FieldLabel htmlFor="confirmPassword">Confirm Password</FieldLabel>
                     <Input
                       id="confirmPassword"
                       type="password"
-                      className="text-xs-ds rounded-sm-ds focus:outline-none focus:ring-1! focus:ring-accent!"
+                      className="rounded-sm-ds text-xs-ds focus:ring-1! focus:ring-accent! focus:outline-none"
                       required
                       {...register("confirmPassword")}
                     />
                     {errors.confirmPassword && (
-                      <span className="text-xs text-destructive mt-1">
+                      <span className="mt-1 text-xs text-destructive">
                         {errors.confirmPassword.message}
                       </span>
                     )}
                   </Field>
                 </Field>
-                <FieldDescription>
-                  Must be at least 8 characters long.
-                </FieldDescription>
+                <FieldDescription>Must be at least 8 characters long.</FieldDescription>
 
                 {/* root errors from server */}
                 {errors.root && (
-                  <span className="text-xs text-destructive mt-1">
-                    {errors.root.message}
-                  </span>
+                  <span className="mt-1 text-xs text-destructive">{errors.root.message}</span>
                 )}
               </Field>
               <Field>

@@ -1,11 +1,13 @@
 "use client";
 
-import * as React from "react";
 import { Search, Plus, Menu } from "lucide-react";
-import { ThemeToggle } from "@/components/ui/theme-toggle";
-import { Button } from "@/components/ui/button";
-import { useSidebar } from "@/context/sidebar-context";
 import { useRouter, useSearchParams } from "next/navigation";
+import * as React from "react";
+
+import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { useSidebar } from "@/context/sidebar-context";
+
 import { LibraryModal } from "../library/library-modal";
 import { AvatarDropdown } from "../user/avatar-dropdown";
 
@@ -63,12 +65,12 @@ export default function Navbar() {
   };
 
   return (
-    <header className="h-14 shrink-0 border-b border-border bg-background flex items-center justify-between px-5 gap-4 z-10">
+    <header className="z-10 flex h-14 shrink-0 items-center justify-between gap-4 border-b border-border bg-background px-5">
       {/* menu button for mobile */}
       <Button
         variant="outline"
         size="icon"
-        className="md:hidden shrink-0"
+        className="shrink-0 md:hidden"
         onClick={toggleSidebar}
         aria-label="Toggle Sidebar"
         title="Toggle Sidebar"
@@ -79,19 +81,19 @@ export default function Navbar() {
       {/* search input */}
       <form
         onSubmit={handleSearchSubmit}
-        className="relative flex-1 max-w-165 hidden sm:block"
+        className="relative hidden max-w-165 flex-1 sm:block"
         title="Search Context Library"
       >
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground pointer-events-none" />
+        <Search className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
         <input
           ref={inputRef}
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search titles, context, tags…"
-          className="w-full h-8.5 pl-9 pr-8 rounded-md-ds border border-input bg-card text-foreground text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent"
+          className="h-8.5 w-full rounded-md-ds border border-input bg-card pr-8 pl-9 text-sm text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-accent focus:outline-none"
         />
-        <kbd className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs-ds font-medium px-1.5 py-0.5 rounded border border-input text-muted-foreground select-none">
+        <kbd className="absolute top-1/2 right-2.5 -translate-y-1/2 rounded border border-input px-1.5 py-0.5 text-xs-ds font-medium text-muted-foreground select-none">
           /
         </kbd>
       </form>
@@ -99,13 +101,10 @@ export default function Navbar() {
       {/* action buttons */}
       <div className="flex items-center gap-2.5">
         <ThemeToggle />
-        <Button
-          className="h-8 gap-1.5 px-3 text-xs font-semibold"
-          onClick={handleLibraryModalOpen}
-        >
+        <Button className="h-8 gap-1.5 px-3 text-xs font-semibold" onClick={handleLibraryModalOpen}>
           <Plus className="size-3.5" />
           <span>Save</span>
-          <kbd className="ml-1 text-[10px] font-medium px-1.5 py-0.5 rounded border border-input">
+          <kbd className="ml-1 rounded border border-input px-1.5 py-0.5 text-[10px] font-medium">
             C
           </kbd>
         </Button>
@@ -114,10 +113,7 @@ export default function Navbar() {
 
       {/* library modal
       {/* no need of condition since we are using the modal as a controlled component and we are handling open or not via props automatically via shadcn */}
-      <LibraryModal
-        open={isLibraryModalOpen}
-        onOpenChange={setIsLibraryModalOpen}
-      />
+      <LibraryModal open={isLibraryModalOpen} onOpenChange={setIsLibraryModalOpen} />
     </header>
   );
 }

@@ -1,7 +1,8 @@
 "use client";
 
-import * as React from "react";
 import { Copy, Check } from "lucide-react";
+import * as React from "react";
+
 import { Button } from "@/components/ui/button";
 import type { ContextItem } from "@/data";
 
@@ -27,12 +28,10 @@ export function DetailContent({ item }: DetailContentProps) {
       {/* description or summary section */}
       {item.desc && (
         <section className="space-y-2">
-          <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+          <h2 className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
             Description
           </h2>
-          <p className="text-sm leading-relaxed text-foreground/90 max-w-2xl">
-            {item.desc}
-          </p>
+          <p className="max-w-2xl text-sm leading-relaxed text-foreground/90">{item.desc}</p>
         </section>
       )}
 
@@ -40,13 +39,13 @@ export function DetailContent({ item }: DetailContentProps) {
       {item.type === "snippet" && item.code && (
         <section className="space-y-2">
           <div className="flex items-center justify-between">
-            <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+            <h2 className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
               Snippet
             </h2>
             <Button
               variant="ghost"
               size="sm"
-              className="px-3.5 h-6 flex items-center gap-1 text-xs text-muted-foreground"
+              className="flex h-6 items-center gap-1 px-3.5 text-xs text-muted-foreground"
               onClick={handleCopyCode}
             >
               {copyButtonText === "Copy" ? (
@@ -57,7 +56,7 @@ export function DetailContent({ item }: DetailContentProps) {
               <span>{copyButtonText}</span>
             </Button>
           </div>
-          <pre className="p-4 rounded-sm-ds bg-muted/40 border border-input text-xs font-mono overflow-x-auto leading-relaxed text-foreground">
+          <pre className="overflow-x-auto rounded-sm-ds border border-input bg-muted/40 p-4 font-mono text-xs leading-relaxed text-foreground">
             <code>{item.code}</code>
           </pre>
         </section>
@@ -66,10 +65,10 @@ export function DetailContent({ item }: DetailContentProps) {
       {/* note body if item is note */}
       {item.type === "note" && item.body && (
         <section className="space-y-2">
-          <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+          <h2 className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
             Note
           </h2>
-          <div className="p-4 rounded-sm-ds bg-card border border-input text-sm leading-6 whitespace-pre-wrap text-foreground">
+          <div className="rounded-sm-ds border border-input bg-card p-4 text-sm leading-6 whitespace-pre-wrap text-foreground">
             {item.body}
           </div>
         </section>

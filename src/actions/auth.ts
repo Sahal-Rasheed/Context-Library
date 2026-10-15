@@ -1,8 +1,8 @@
 "use server";
 
+import { isAPIError } from "better-auth/api";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { isAPIError } from "better-auth/api";
 
 import { auth } from "@/lib/auth";
 import {
@@ -44,8 +44,7 @@ export async function signUpWithEmail(
 
       return {
         success: false,
-        message:
-          "Unable to create your account. Please check your details and try again.",
+        message: "Unable to create your account. Please check your details and try again.",
       };
     }
 
@@ -85,8 +84,7 @@ export async function signInWithEmail(
 
       return {
         success: false,
-        message:
-          "Unable to log in. Please check your email and password and try again.",
+        message: "Unable to log in. Please check your email and password and try again.",
       };
     }
 

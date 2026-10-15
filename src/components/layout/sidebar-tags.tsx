@@ -1,12 +1,13 @@
 "use client";
 
-import Link from "next/link";
 import { Tag } from "lucide-react";
-import { useState, useMemo } from "react";
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { cn } from "@/lib/utils";
-import { contextItems } from "@/data";
+import { useState, useMemo } from "react";
+
 import { useSidebar } from "@/context/sidebar-context";
+import { contextItems } from "@/data";
+import { cn } from "@/lib/utils";
 
 const TAGS_COUNT = 8;
 
@@ -37,9 +38,7 @@ export default function SidebarTags() {
 
   return (
     <div className="flex flex-col gap-1 select-none">
-      <p className="text-xs font-semibold px-2 pt-1 text-muted-foreground">
-        Tags
-      </p>
+      <p className="px-2 pt-1 text-xs font-semibold text-muted-foreground">Tags</p>
 
       <nav className="flex flex-col gap-1">
         {tagsList.slice(0, visibleTags).map((item) => {
@@ -50,15 +49,15 @@ export default function SidebarTags() {
               href={item.href}
               onClick={closeSidebar}
               className={cn(
-                "flex items-center justify-between text-sm px-2 py-1 rounded-md-ds text-muted-foreground hover:bg-muted hover:text-primary transition-colors",
-                isActive ? "bg-muted text-primary font-semibold" : "",
+                "flex items-center justify-between rounded-md-ds px-2 py-1 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-primary",
+                isActive ? "bg-muted font-semibold text-primary" : "",
               )}
             >
               <span className="flex items-center gap-2.5 truncate">
                 <Tag className="size-4 shrink-0" />
                 <span className="truncate">{item.name}</span>
               </span>
-              <span className="text-xs-ds text-muted-foreground font-medium shrink-0 ml-auto">
+              <span className="ml-auto shrink-0 text-xs-ds font-medium text-muted-foreground">
                 {item.count}
               </span>
             </Link>
@@ -68,7 +67,7 @@ export default function SidebarTags() {
         {visibleTags < tagsList.length && (
           <button
             type="button"
-            className="text-xs px-2 py-1 text-muted-foreground hover:text-primary text-left cursor-pointer transition-colors"
+            className="cursor-pointer px-2 py-1 text-left text-xs text-muted-foreground transition-colors hover:text-primary"
             onClick={() => setVisibleTags(tagsList.length)}
           >
             Show all {tagsList.length}
@@ -77,7 +76,7 @@ export default function SidebarTags() {
         {visibleTags === tagsList.length && tagsList.length > TAGS_COUNT && (
           <button
             type="button"
-            className="text-xs px-2 py-1 text-muted-foreground hover:text-primary text-left cursor-pointer transition-colors"
+            className="cursor-pointer px-2 py-1 text-left text-xs text-muted-foreground transition-colors hover:text-primary"
             onClick={() => setVisibleTags(TAGS_COUNT)}
           >
             Show less

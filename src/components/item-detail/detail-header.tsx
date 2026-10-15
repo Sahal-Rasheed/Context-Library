@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import {
   ArrowLeft,
   ExternalLink,
@@ -11,9 +10,11 @@ import {
   Plus,
   // X,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import Link from "next/link";
+
 import { SourceIndicator } from "@/components/library/source-indicator";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import type { ContextItem } from "@/data";
 
 interface DetailHeaderProps {
@@ -32,7 +33,7 @@ export function DetailHeader({ item }: DetailHeaderProps) {
       <div>
         <Link
           href={backHref}
-          className="inline-flex items-center gap-1.5 text-md-ds  text-muted-foreground hover:text-foreground font-medium transition-colors group rounded-sm-ds px-1.5 py-0.5 dark:hover:bg-muted/50 hover:bg-muted"
+          className="group inline-flex items-center gap-1.5 rounded-sm-ds px-1.5 py-0.5 text-md-ds font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground dark:hover:bg-muted/50"
         >
           <ArrowLeft className="size-3.5 transition-transform group-hover:-translate-x-0.5" />
           <span>{backLabel}</span>
@@ -40,7 +41,7 @@ export function DetailHeader({ item }: DetailHeaderProps) {
       </div>
 
       {/* source & indicator */}
-      <div className="flex items-center gap-2 text-xs font-mono text-muted-foreground">
+      <div className="flex items-center gap-2 font-mono text-xs text-muted-foreground">
         <SourceIndicator
           title={item.title}
           type={item.type}
@@ -52,7 +53,7 @@ export function DetailHeader({ item }: DetailHeaderProps) {
             href={item.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="underline-offset-3 hover:underline hover:text-foreground truncate"
+            className="truncate underline-offset-3 hover:text-foreground hover:underline"
           >
             {item.url.replace(/^https?:\/\/(www\.)?/, "")}
           </a>
@@ -62,14 +63,14 @@ export function DetailHeader({ item }: DetailHeaderProps) {
       </div>
 
       {/* title */}
-      <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-foreground">
+      <h1 className="text-2xl font-bold tracking-tight text-foreground md:text-3xl">
         {item.title}
       </h1>
 
       {/* action buttons */}
-      <div className="flex items-center gap-2 flex-wrap">
+      <div className="flex flex-wrap items-center gap-2">
         {item.url && (
-          <Button className="px-3 text-xs font-medium bg-foreground text-background hover:bg-foreground/90">
+          <Button className="bg-foreground px-3 text-xs font-medium text-background hover:bg-foreground/90">
             <a
               href={item.url}
               target="_blank"
@@ -82,18 +83,12 @@ export function DetailHeader({ item }: DetailHeaderProps) {
           </Button>
         )}
 
-        <Button
-          variant="outline"
-          className="flex justify-center gap-1.5 px-3 text-xs font-medium"
-        >
+        <Button variant="outline" className="flex justify-center gap-1.5 px-3 text-xs font-medium">
           <Star className={`size-3.5 ${item.fav ? "fill-foreground" : ""}`} />
           <span>{item.fav ? "Favorited" : "Favorite"}</span>
         </Button>
 
-        <Button
-          variant="outline"
-          className="flex justify-center gap-1.5 px-3 text-xs font-medium"
-        >
+        <Button variant="outline" className="flex justify-center gap-1.5 px-3 text-xs font-medium">
           <Archive className="size-3.5" />
           <span>Archive</span>
         </Button>
@@ -109,24 +104,24 @@ export function DetailHeader({ item }: DetailHeaderProps) {
       </div>
 
       {/* folder pill & tag chips */}
-      <div className="flex items-center gap-2 flex-wrap pt-0.5">
+      <div className="flex flex-wrap items-center gap-2 pt-0.5">
         {item.folder && (
           <Badge
             variant="outline"
-            className="bg-card text-foreground border-border rounded-sm-ds text-md-ds flex items-center gap-1.5 py-3 px capitalize"
+            className="px flex items-center gap-1.5 rounded-sm-ds border-border bg-card py-3 text-md-ds text-foreground capitalize"
           >
             <Folder className="size-3.5 text-muted-foreground" />
             <span>{item.folder}</span>
           </Badge>
         )}
 
-        <div className="h-4 w-px bg-input mx-1" />
+        <div className="mx-1 h-4 w-px bg-input" />
 
         {item.tags.map((tag) => (
           <Badge
             key={tag}
             variant="secondary"
-            className="dark:bg-black/75 bg-neutral-400/10 text-xs-ds rounded-sm-ds text-muted-foreground dark:hover:bg-muted hover:bg-neutral-400/40 hover:text-foreground"
+            className="rounded-sm-ds bg-neutral-400/10 text-xs-ds text-muted-foreground hover:bg-neutral-400/40 hover:text-foreground dark:bg-black/75 dark:hover:bg-muted"
           >
             #{tag}
           </Badge>
@@ -135,7 +130,7 @@ export function DetailHeader({ item }: DetailHeaderProps) {
         <Button
           variant="outline"
           size="xs"
-          className="h-5.5 inline-flex items-center gap-1 dark:bg-black/75  bg-neutral-400/10 text-muted-foreground dark:hover:bg-muted hover:bg-neutral-400/40 hover:text-foreground rounded border border-dashed border-border transition-colors cursor-pointer"
+          className="inline-flex h-5.5 cursor-pointer items-center gap-1 rounded border border-dashed border-border bg-neutral-400/10 text-muted-foreground transition-colors hover:bg-neutral-400/40 hover:text-foreground dark:bg-black/75 dark:hover:bg-muted"
         >
           <Plus className="size-3" />
           <span>Tag</span>

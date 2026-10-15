@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 
 import "../globals.css";
-import { geistSans, geistMono, newsreader } from "@/lib/fonts";
 import { ThemeProvider } from "@/components/theme-provider";
+import { geistSans, geistMono, newsreader } from "@/lib/fonts";
 
 export const metadata: Metadata = {
   title: "Context Library | Auth",

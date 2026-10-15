@@ -1,9 +1,11 @@
-import type { ContextItem } from "@/data";
-import { formatTimeAgo } from "@/lib/utils";
-import { SourceIndicator } from "./source-indicator";
-import { Badge } from "../ui/badge";
 import { Folder } from "lucide-react";
 import Link from "next/link";
+
+import type { ContextItem } from "@/data";
+import { formatTimeAgo } from "@/lib/utils";
+
+import { Badge } from "../ui/badge";
+import { SourceIndicator } from "./source-indicator";
 
 export function CompactView({ items }: { items: ContextItem[] }) {
   return (
@@ -21,37 +23,37 @@ function CompactItem({ item }: { item: ContextItem }) {
   const extraTagsCount = item.tags.length > 3 ? item.tags.length - 3 : 0;
 
   return (
-    <div className="grid grid-cols-[1fr_auto] lg:grid-cols-[2fr_0.8fr_0.8fr_1.5fr_0.5fr] items-center p-2 dark:hover:bg-muted/60 hover:bg-muted hover:cursor-pointer gap-5 md:gap-2 group transition-colors">
+    <div className="group grid grid-cols-[1fr_auto] items-center gap-5 p-2 transition-colors hover:cursor-pointer hover:bg-muted md:gap-2 lg:grid-cols-[2fr_0.8fr_0.8fr_1.5fr_0.5fr] dark:hover:bg-muted/60">
       {/* icon + title */}
-      <div className="flex items-center gap-2 min-w-0">
+      <div className="flex min-w-0 items-center gap-2">
         <SourceIndicator
           title={item.title}
           type={item.type}
           url={item.url}
           className="size-5 text-[10px]"
         />
-        <span className="text-md-ds font-semibold text-foreground truncate group-hover:text-primary">
+        <span className="truncate text-md-ds font-semibold text-foreground group-hover:text-primary">
           {item.title}
         </span>
       </div>
 
       {/* url host */}
-      <div className="hidden lg:block min-w-0">
+      <div className="hidden min-w-0 lg:block">
         {item.url ? (
-          <span className="text-muted-foreground text-xs font-mono truncate block">
+          <span className="block truncate font-mono text-xs text-muted-foreground">
             {new URL(item.url).hostname.replace("www.", "")}
           </span>
         ) : (
-          <span className="text-muted-foreground text-xs">N/A</span>
+          <span className="text-xs text-muted-foreground">N/A</span>
         )}
       </div>
 
       {/* folder */}
-      <div className="hidden lg:flex items-center justify-start">
+      <div className="hidden items-center justify-start lg:flex">
         {item.folder && (
           <Badge
             variant="outline"
-            className="bg-background text-muted-foreground border border-border rounded-sm-ds text-xs-ds inline-flex items-center gap-1 capitalize py-0.5"
+            className="inline-flex items-center gap-1 rounded-sm-ds border border-border bg-background py-0.5 text-xs-ds text-muted-foreground capitalize"
           >
             <Folder className="size-3" />
             {item.folder}
@@ -60,21 +62,19 @@ function CompactItem({ item }: { item: ContextItem }) {
       </div>
 
       {/* tags */}
-      <div className="hidden lg:flex gap-1 justify-start items-center flex-wrap">
+      <div className="hidden flex-wrap items-center justify-start gap-1 lg:flex">
         {item.tags?.slice(0, 3).map((tag, index) => (
           <Badge
             key={index}
             variant="secondary"
-            className="dark:bg-black/75 bg-neutral-400/10 text-xs-ds rounded-sm-ds text-muted-foreground whitespace-nowrap py-0.5"
+            className="rounded-sm-ds bg-neutral-400/10 py-0.5 text-xs-ds whitespace-nowrap text-muted-foreground dark:bg-black/75"
           >
             #{tag}
           </Badge>
         ))}
 
         {extraTagsCount > 0 && (
-          <span className="text-xs-ds text-muted-foreground font-medium">
-            +{extraTagsCount}
-          </span>
+          <span className="text-xs-ds font-medium text-muted-foreground">+{extraTagsCount}</span>
         )}
       </div>
 

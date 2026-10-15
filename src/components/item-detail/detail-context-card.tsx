@@ -1,9 +1,10 @@
 "use client";
 
-import * as React from "react";
 import { PenSquare } from "lucide-react";
-import { formatTimeAgo } from "@/lib/utils";
+import * as React from "react";
+
 import { Button } from "@/components/ui/button";
+import { formatTimeAgo } from "@/lib/utils";
 
 interface DetailContextCardProps {
   ctx?: string;
@@ -11,11 +12,7 @@ interface DetailContextCardProps {
   savedAt: string;
 }
 
-export function DetailContextCard({
-  ctx,
-  ctxAt,
-  savedAt,
-}: DetailContextCardProps) {
+export function DetailContextCard({ ctx, ctxAt, savedAt }: DetailContextCardProps) {
   const [isEditing, setIsEditing] = React.useState(false);
   const [draft, setDraft] = React.useState(ctx || "");
 
@@ -39,19 +36,16 @@ export function DetailContextCard({
 
   if (!ctx && !isEditing) {
     return (
-      <div className="border border-dashed border-input rounded-md-ds p-5 my-6 flex items-center justify-between gap-4">
+      <div className="my-6 flex items-center justify-between gap-4 rounded-md-ds border border-dashed border-input p-5">
         <div>
-          <h3 className="text-sm font-semibold text-foreground">
-            No context yet
-          </h3>
-          <p className="text-xs text-muted-foreground mt-1">
-            Add a note about why this matters, how you plan to use it, or what
-            to remember.
+          <h3 className="text-sm font-semibold text-foreground">No context yet</h3>
+          <p className="mt-1 text-xs text-muted-foreground">
+            Add a note about why this matters, how you plan to use it, or what to remember.
           </p>
         </div>
         <Button
           onClick={() => setIsEditing(true)}
-          className="h-0 px-3.5 py-4 gap-1.5 text-xs font-semibold shrink-0"
+          className="h-0 shrink-0 gap-1.5 px-3.5 py-4 text-xs font-semibold"
         >
           <PenSquare className="size-3.5" />
           <span>Add context</span>
@@ -62,9 +56,9 @@ export function DetailContextCard({
 
   if (isEditing) {
     return (
-      <div className="bg-amber-500/10 dark:bg-amber-500/10 border-l-3 border-[#B8931A] rounded-r-sm-ds p-4.5 my-6 space-y-3 shadow-xs">
+      <div className="my-6 space-y-3 rounded-r-sm-ds border-l-3 border-[#B8931A] bg-amber-500/10 p-4.5 shadow-xs dark:bg-amber-500/10">
         <div className="flex items-center justify-between">
-          <span className="text-xs font-semibold text-foreground flex items-center gap-1.5">
+          <span className="flex items-center gap-1.5 text-xs font-semibold text-foreground">
             <PenSquare className="size-3.5 text-[#B8931A]" />
             Why I saved this
           </span>
@@ -74,14 +68,14 @@ export function DetailContextCard({
           onChange={(e) => setDraft(e.target.value)}
           rows={4}
           placeholder="What is this useful for? When will you need it again?"
-          className="w-full text-base font-serif bg-card border border-input rounded-md-ds p-3 text-foreground focus:outline-none focus:ring-2 focus:ring-accent"
+          className="w-full rounded-md-ds border border-input bg-card p-3 font-serif text-base text-foreground focus:ring-2 focus:ring-accent focus:outline-none"
           autoFocus
         />
         <div className="flex items-center gap-2">
           <Button
             size="sm"
             onClick={() => setIsEditing(false)}
-            className="text-xs h-0 py-4 px-3.5 rounded-md-ds text-secondary transition-colors"
+            className="h-0 rounded-md-ds px-3.5 py-4 text-xs text-secondary transition-colors"
           >
             Save context
           </Button>
@@ -89,7 +83,7 @@ export function DetailContextCard({
             variant="ghost"
             size="sm"
             onClick={() => setIsEditing(false)}
-            className="h-0 text-xs py-4 px-3.5 rounded-md-ds text-muted-foreground hover:dark:bg-muted-foreground/10 hover:bg-muted-foreground/10 transition-colors"
+            className="h-0 rounded-md-ds px-3.5 py-4 text-xs text-muted-foreground transition-colors hover:bg-muted-foreground/10 hover:dark:bg-muted-foreground/10"
           >
             Cancel
           </Button>
@@ -99,30 +93,28 @@ export function DetailContextCard({
   }
 
   return (
-    <section className="bg-amber-500/10 dark:bg-amber-500/10 border-l-3 border-[#B8931A] rounded-r-sm-ds p-5 my-6 space-y-3 shadow-xs">
-      <div className="flex items-center justify-between text-xs text-foreground/80 font-medium">
+    <section className="my-6 space-y-3 rounded-r-sm-ds border-l-3 border-[#B8931A] bg-amber-500/10 p-5 shadow-xs dark:bg-amber-500/10">
+      <div className="flex items-center justify-between text-xs font-medium text-foreground/80">
         <span className="flex items-center gap-1.5">
           <PenSquare className="size-3.5 text-[#B8931A]" />
           Why I saved this
         </span>
         <button
           onClick={() => setIsEditing(true)}
-          className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground cursor-pointer"
+          className="inline-flex cursor-pointer items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
         >
           <span>Edit</span>
-          <kbd className="text-[10px] font-mono px-1.5 py-0.5 rounded-xs-ds border border-input bg-background">
+          <kbd className="rounded-xs-ds border border-input bg-background px-1.5 py-0.5 font-mono text-[10px]">
             E
           </kbd>
         </button>
       </div>
 
-      <div className="font-serif text-[17px] leading-relaxed text-foreground tracking-wide font-normal">
+      <div className="font-serif text-[17px] leading-relaxed font-normal tracking-wide text-foreground">
         {draft}
       </div>
 
-      <div className="text-xs text-muted-foreground pt-1">
-        Written {timeLabel}
-      </div>
+      <div className="pt-1 text-xs text-muted-foreground">Written {timeLabel}</div>
     </section>
   );
 }

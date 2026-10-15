@@ -3,8 +3,8 @@ import type { Metadata } from "next";
 import "../globals.css";
 import Navbar from "@/components/layout/navbar";
 import Sidebar from "@/components/layout/sidebar";
-import { SidebarProvider } from "@/context/sidebar-context";
 import { ThemeProvider } from "@/components/theme-provider";
+import { SidebarProvider } from "@/context/sidebar-context";
 import { geistSans, geistMono, newsreader } from "@/lib/fonts";
 
 export const metadata: Metadata = {
@@ -31,17 +31,15 @@ export default function MainRootLayout({
           disableTransitionOnChange
         >
           <SidebarProvider>
-            <div className="grid grid-cols-1 md:grid-cols-[auto_1fr] h-screen w-full overflow-hidden">
+            <div className="grid h-screen w-full grid-cols-1 overflow-hidden md:grid-cols-[auto_1fr]">
               {/* sidebar */}
               <Sidebar />
 
               {/* right column */}
-              <div className="flex flex-col h-full min-h-0 min-w-0 overflow-hidden">
+              <div className="flex h-full min-h-0 min-w-0 flex-col overflow-hidden">
                 <Navbar />
-                <main className="flex-1 min-h-0 overflow-y-auto scrollbar-thin scrollbar-thumb-muted">
-                  <div className="mx-auto w-full max-w-6xl px-6">
-                    {children}
-                  </div>
+                <main className="min-h-0 flex-1 scrollbar-thin scrollbar-thumb-muted overflow-y-auto">
+                  <div className="mx-auto w-full max-w-6xl px-6">{children}</div>
                 </main>
               </div>
             </div>

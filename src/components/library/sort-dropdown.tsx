@@ -1,6 +1,8 @@
 "use client";
 
+import { SortDesc } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -9,7 +11,6 @@ import {
   DropdownMenuGroup,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { SortDesc } from "lucide-react";
 
 export function SortDropdownMenu() {
   const router = useRouter();
@@ -48,8 +49,7 @@ export function SortDropdownMenu() {
   ];
 
   const currentSortName =
-    sortOptions.find((sort) => sort.type === activeSort)?.name ||
-    sortOptions[0].name;
+    sortOptions.find((sort) => sort.type === activeSort)?.name || sortOptions[0].name;
 
   return (
     <DropdownMenu>
@@ -57,7 +57,7 @@ export function SortDropdownMenu() {
         render={
           <Button
             variant="outline"
-            className="text-xs dark:bg-popover bg-popover text-foreground rounded-md dark:hover:bg-popover-foreground/10 hover:bg-muted/40 cursor-pointer flex gap-2 items-center justify-center"
+            className="flex cursor-pointer items-center justify-center gap-2 rounded-md bg-popover text-xs text-foreground hover:bg-muted/40 dark:bg-popover dark:hover:bg-popover-foreground/10"
           >
             <SortDesc className="size-3" />
             <span>{currentSortName}</span>
@@ -69,7 +69,7 @@ export function SortDropdownMenu() {
           {sortOptions.map((sort) => (
             <DropdownMenuCheckboxItem
               key={sort.name}
-              className="flex items-center gap-2 rounded-sm-ds text-xs-ds text-foreground focus:text-foreground dark:hover:bg-popover-foreground/10! hover:bg-muted/85! cursor-pointer"
+              className="flex cursor-pointer items-center gap-2 rounded-sm-ds text-xs-ds text-foreground hover:bg-muted/85! focus:text-foreground dark:hover:bg-popover-foreground/10!"
               checked={activeSort === sort.type}
               onCheckedChange={() => handleSortChange(sort.type)}
             >

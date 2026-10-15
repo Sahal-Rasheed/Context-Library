@@ -1,7 +1,7 @@
 "use client";
 
-import * as React from "react";
 import { X } from "lucide-react";
+import * as React from "react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -87,8 +87,8 @@ export function TagsInput({
   return (
     <div
       className={cn(
-        "flex min-h-8 w-full flex-wrap items-center gap-1 rounded-sm-ds border border-input bg-transparent dark:bg-input/30 p-1",
-        "focus-within:outline-none focus-within:ring-1 focus-within:ring-accent",
+        "flex min-h-8 w-full flex-wrap items-center gap-1 rounded-sm-ds border border-input bg-transparent p-1 dark:bg-input/30",
+        "focus-within:ring-1 focus-within:ring-accent focus-within:outline-none",
         disabled && "cursor-not-allowed opacity-50",
         className,
       )}
@@ -101,7 +101,7 @@ export function TagsInput({
         <Badge
           key={`${tag}-${index}`}
           variant="secondary"
-          className="inline-flex dark:bg-black/30 bg-neutral-400/10 shrink-0 items-center gap-1 rounded-sm-ds border-0 px-1.5 py-0 text-xs font-medium"
+          className="inline-flex shrink-0 items-center gap-1 rounded-sm-ds border-0 bg-neutral-400/10 px-1.5 py-0 text-xs font-medium dark:bg-black/30"
         >
           <span>#{tag}</span>
 
@@ -112,7 +112,7 @@ export function TagsInput({
             disabled={disabled}
             title={`Remove ${tag}`}
             aria-label={`Remove ${tag}`}
-            className="size-3.5 shrink-0 rounded-sm p-0 text-muted-foreground hover:bg-muted-foreground/20 hover:dark:bg-primary/20 hover:text-foreground"
+            className="size-3.5 shrink-0 rounded-sm p-0 text-muted-foreground hover:bg-muted-foreground/20 hover:text-foreground hover:dark:bg-primary/20"
             onClick={(event) => {
               event.stopPropagation();
               removeTag(index);
@@ -133,7 +133,7 @@ export function TagsInput({
         onBlur={commitInput}
         placeholder={tags.length === 0 ? placeholder : ""}
         className={cn(
-          "flex-1 items-center border-0 rounded-sm-ds bg-transparent dark:bg-transparent shadow-none outline-none focus-visible:ring-0 focus-visible:ring-offset-0 placeholder:text-xs-ds placeholder:tracking-wide placeholder:text-muted-foreground",
+          "flex-1 items-center rounded-sm-ds border-0 bg-transparent shadow-none outline-none placeholder:text-xs-ds placeholder:tracking-wide placeholder:text-muted-foreground focus-visible:ring-0 focus-visible:ring-offset-0 dark:bg-transparent",
           tags.length !== 0 ? "px-0.5" : "",
         )}
       />

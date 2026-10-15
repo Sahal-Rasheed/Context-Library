@@ -1,5 +1,8 @@
 "use client";
 
+import { Mail, User, Info } from "lucide-react";
+
+import { signOut } from "@/actions/auth";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,10 +13,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { signOut } from "@/actions/auth";
 import { authClient } from "@/lib/auth-client";
-
-import { Mail, User, Info } from "lucide-react";
 
 export function AvatarDropdown() {
   // since this is a client component, and also the `NavBar` where this component is used is also a client component,
@@ -31,7 +31,7 @@ export function AvatarDropdown() {
       <Button
         variant="outline"
         size="icon"
-        className="after:size-4.5 after:rounded-sm after:aspect-square after:overflow-hidden after:bg-neutral-500 after:animate-ping animate-pulse"
+        className="animate-pulse after:aspect-square after:size-4.5 after:animate-ping after:overflow-hidden after:rounded-sm after:bg-neutral-500"
         title="Profile"
       />
     );
@@ -41,17 +41,12 @@ export function AvatarDropdown() {
     <DropdownMenu>
       <DropdownMenuTrigger
         render={
-          <Button
-            variant="outline"
-            size="icon"
-            className="overflow-hidden"
-            title="Profile"
-          >
+          <Button variant="outline" size="icon" className="overflow-hidden" title="Profile">
             <Avatar>
               <AvatarImage
                 src="https://cdn-icons-png.flaticon.com/512/7422/7422265.png"
                 alt="avatar"
-                className="rounded-md-ds aspect-square overflow-hidden"
+                className="aspect-square overflow-hidden rounded-md-ds"
               />
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
@@ -65,24 +60,22 @@ export function AvatarDropdown() {
       >
         <DropdownMenuGroup>
           {session.user.email.includes("anonymous") ? null : (
-            <DropdownMenuItem className="text-sm font-medium tracking-wide truncate max-w-md pointer-events-none">
+            <DropdownMenuItem className="pointer-events-none max-w-md truncate text-sm font-medium tracking-wide">
               <Mail className="size-3.5" />
-              <span className="line-clamp-2 truncate">
-                {session.user.email}
-              </span>
+              <span className="line-clamp-2 truncate">{session.user.email}</span>
             </DropdownMenuItem>
           )}
 
-          <DropdownMenuItem className="text-sm font-medium tracking-wide truncate max-w-md pointer-events-none">
+          <DropdownMenuItem className="pointer-events-none max-w-md truncate text-sm font-medium tracking-wide">
             <User className="size-3.5" />
             <span className="line-clamp-2 truncate">{session.user.name}</span>
           </DropdownMenuItem>
           {session.user.isAnonymous && (
-            <DropdownMenuItem className="text-xs text-amber-300 font-medium tracking-wide max-w-xs pointer-events-none">
+            <DropdownMenuItem className="pointer-events-none max-w-xs text-xs font-medium tracking-wide text-amber-300">
               <Info className="size-3.5" />
               <span className="line-clamp-2">
-                You are currently logged in as a guest. Your data will not be
-                saved after you log out.
+                You are currently logged in as a guest. Your data will not be saved after you log
+                out.
               </span>
             </DropdownMenuItem>
           )}

@@ -1,27 +1,19 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import { cn } from "cn";
 import Link from "next/link";
+import { useTransition } from "react";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 
+import { signInWithEmail, signInAsGuest } from "@/actions/auth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Field,
-  FieldDescription,
-  FieldGroup,
-  FieldLabel,
-} from "@/components/ui/field";
+import { Field, FieldDescription, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { loginSchema, type LoginFormData } from "@/lib/schemas";
-import { signInWithEmail, signInAsGuest } from "@/actions/auth";
-import { useTransition } from "react";
 
-export function SigninForm({
-  className,
-  ...props
-}: React.ComponentProps<"div">) {
+export function SigninForm({ className, ...props }: React.ComponentProps<"div">) {
   const [isPending, startTransition] = useTransition();
 
   const {
@@ -105,53 +97,40 @@ export function SigninForm({
                   id="email"
                   type="email"
                   placeholder="jhon@example.com"
-                  className="text-xs-ds rounded-sm-ds focus:outline-none focus:ring-1! focus:ring-accent! placeholder:tracking-wide placeholder:text-muted-foreground"
+                  className="rounded-sm-ds text-xs-ds placeholder:tracking-wide placeholder:text-muted-foreground focus:ring-1! focus:ring-accent! focus:outline-none"
                   required
                   {...register("email")}
                 />
                 {errors.email && (
-                  <span className="text-xs text-destructive mt-1">
-                    {errors.email.message}
-                  </span>
+                  <span className="mt-1 text-xs text-destructive">{errors.email.message}</span>
                 )}
               </Field>
               <Field>
                 <div className="flex items-center">
                   <FieldLabel htmlFor="password">Password</FieldLabel>
-                  <a
-                    href="#"
-                    className="ml-auto text-sm underline-offset-4 hover:underline"
-                  >
+                  <a href="#" className="ml-auto text-sm underline-offset-4 hover:underline">
                     Forgot your password?
                   </a>
                 </div>
                 <Input
                   id="password"
                   type="password"
-                  className="text-xs-ds rounded-sm-ds focus:outline-none focus:ring-1! focus:ring-accent!"
+                  className="rounded-sm-ds text-xs-ds focus:ring-1! focus:ring-accent! focus:outline-none"
                   required
                   {...register("password")}
                 />
                 {errors.password && (
-                  <span className="text-xs text-destructive mt-1">
-                    {errors.password.message}
-                  </span>
+                  <span className="mt-1 text-xs text-destructive">{errors.password.message}</span>
                 )}
               </Field>
 
               {/* root errors from server */}
               {errors.root && (
-                <span className="text-xs text-destructive mt-1">
-                  {errors.root.message}
-                </span>
+                <span className="mt-1 text-xs text-destructive">{errors.root.message}</span>
               )}
 
               <Field>
-                <Button
-                  type="submit"
-                  className="rounded-sm-ds"
-                  disabled={isLoginPending}
-                >
+                <Button type="submit" className="rounded-sm-ds" disabled={isLoginPending}>
                   {isSubmitting ? "Signing in..." : "Sign in"}
                 </Button>
 
@@ -160,13 +139,12 @@ export function SigninForm({
                   type="button"
                   onClick={handleGuestLogin}
                   disabled={isLoginPending}
-                  className="rounded-sm-ds my-1.5"
+                  className="my-1.5 rounded-sm-ds"
                 >
                   {isPending ? "Signing in as guest..." : "Continue as Guest"}
                 </Button>
                 <FieldDescription className="text-center">
-                  Don&apos;t have an account?{" "}
-                  <Link href="/signup">Sign up</Link>
+                  Don&apos;t have an account? <Link href="/signup">Sign up</Link>
                 </FieldDescription>
               </Field>
             </FieldGroup>

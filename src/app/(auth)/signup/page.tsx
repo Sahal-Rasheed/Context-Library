@@ -6,14 +6,11 @@ export default function SignupPage() {
   return (
     <div className="flex min-h-svh flex-col items-center justify-center gap-6 bg-muted p-6 md:p-10">
       <div className="flex w-full max-w-sm flex-col gap-4.5">
-        <Link
-          href="/"
-          className="flex items-center gap-2 self-center font-medium"
-        >
+        <Link href="/" className="flex items-center gap-2 self-center font-medium">
           <div className="flex size-5 items-center justify-center rounded-md bg-primary text-primary-foreground">
-            <span className="rounded-sm-ds bg-primary text-primary-foreground grid place-items-center">
+            <span className="grid place-items-center rounded-sm-ds bg-primary text-primary-foreground">
               <svg
-                className="size-4 stroke-2 stroke-current fill-none"
+                className="size-4 fill-none stroke-current stroke-2"
                 viewBox="0 0 24 24"
                 aria-hidden="true"
               >

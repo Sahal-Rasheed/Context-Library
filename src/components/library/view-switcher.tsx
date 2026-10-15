@@ -1,15 +1,12 @@
 "use client";
 
-import { AlignJustify, LayoutGridIcon, List } from "lucide-react";
-import { Button } from "../ui/button";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { cn } from "cn";
+import { AlignJustify, LayoutGridIcon, List } from "lucide-react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
-export default function ViewSwitcher({
-  value,
-}: {
-  value: "list" | "grid" | "compact";
-}) {
+import { Button } from "../ui/button";
+
+export default function ViewSwitcher({ value }: { value: "list" | "grid" | "compact" }) {
   const router = useRouter();
   const pathname = usePathname(); // returns "/dashboard" on /dashboard?foo=bar
   const searchParams = useSearchParams(); // returns 'bar' when ?foo=bar
@@ -22,12 +19,12 @@ export default function ViewSwitcher({
   };
 
   return (
-    <div className="flex bg-popover text-muted-foreground rounded-md divide-x divide-white overflow-hidden m-0">
+    <div className="m-0 flex divide-x divide-white overflow-hidden rounded-md bg-popover text-muted-foreground">
       <Button
         className={cn(
-          "rounded-l-md rounded-r-none border-r-0 dark:hover:bg-popover-foreground/5 hover:bg-muted/65 cursor-pointer",
+          "cursor-pointer rounded-l-md rounded-r-none border-r-0 hover:bg-muted/65 dark:hover:bg-popover-foreground/5",
           value === "list" &&
-            "bg-muted hover:bg-muted text-foreground dark:bg-popover-foreground/10 dark:hover:dark:bg-popover-foreground/10",
+            "bg-muted text-foreground hover:bg-muted dark:bg-popover-foreground/10 dark:hover:dark:bg-popover-foreground/10",
         )}
         variant="outline"
         aria-label="List View"
@@ -39,9 +36,9 @@ export default function ViewSwitcher({
       </Button>
       <Button
         className={cn(
-          "rounded-none dark:hover:bg-popover-foreground/5 hover:bg-muted/65 cursor-pointer",
+          "cursor-pointer rounded-none hover:bg-muted/65 dark:hover:bg-popover-foreground/5",
           value === "compact" &&
-            "bg-muted hover:bg-muted text-foreground dark:bg-popover-foreground/10 dark:hover:dark:bg-popover-foreground/10",
+            "bg-muted text-foreground hover:bg-muted dark:bg-popover-foreground/10 dark:hover:dark:bg-popover-foreground/10",
         )}
         variant="outline"
         aria-label="Compact View"
@@ -53,9 +50,9 @@ export default function ViewSwitcher({
       </Button>
       <Button
         className={cn(
-          "rounded-r-md rounded-l-none border-l-0 dark:hover:bg-popover-foreground/5 hover:bg-muted/65 cursor-pointer",
+          "cursor-pointer rounded-l-none rounded-r-md border-l-0 hover:bg-muted/65 dark:hover:bg-popover-foreground/5",
           value === "grid" &&
-            "bg-muted hover:bg-muted text-foreground dark:bg-popover-foreground/10 dark:hover:dark:bg-popover-foreground/10",
+            "bg-muted text-foreground hover:bg-muted dark:bg-popover-foreground/10 dark:hover:dark:bg-popover-foreground/10",
         )}
         variant="outline"
         aria-label="Grid View"

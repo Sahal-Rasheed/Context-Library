@@ -1,5 +1,4 @@
 import { cn } from "cn";
-import type { ContextItemType } from "@/data";
 import {
   MessageCircle,
   NotepadText,
@@ -7,6 +6,8 @@ import {
   Code,
   Image as ImageIcon,
 } from "lucide-react";
+
+import type { ContextItemType } from "@/data";
 
 const COLOR_VARIANTS = [
   "bg-sky-500/12 text-sky-600 border border-sky-500/20 dark:bg-sky-500/10 dark:text-sky-400 dark:border-sky-500/20",
@@ -70,7 +71,7 @@ export function SourceIndicator({
   return (
     <div
       className={cn(
-        "size-7.5 aspect-square flex items-center justify-center text-xs font-semibold uppercase select-none shrink-0 rounded-md-ds",
+        "flex aspect-square size-7.5 shrink-0 items-center justify-center rounded-md-ds text-xs font-semibold uppercase select-none",
         colorClass,
         className,
       )}

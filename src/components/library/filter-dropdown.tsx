@@ -1,4 +1,5 @@
 import { Filter } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -9,6 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+
 import { CONTENT_TYPES } from "./library-page";
 
 type FilterDropdownMenuProps = {
@@ -30,12 +32,12 @@ export function FilterDropdownMenu({
         render={
           <Button
             variant="outline"
-            className="text-xs dark:bg-popover bg-popover text-foreground rounded-md dark:hover:bg-popover-foreground/10 hover:bg-muted/40 cursor-pointer flex gap-2 items-center justify-center"
+            className="flex cursor-pointer items-center justify-center gap-2 rounded-md bg-popover text-xs text-foreground hover:bg-muted/40 dark:bg-popover dark:hover:bg-popover-foreground/10"
           >
             <Filter className="size-3" />
             <span>Filter</span>
             {activeFilterCount > 0 && (
-              <span className="text-xs tracking-widest font-semibold text-primary">
+              <span className="text-xs font-semibold tracking-widest text-primary">
                 ({activeFilterCount})
               </span>
             )}
@@ -51,7 +53,7 @@ export function FilterDropdownMenu({
           {CONTENT_TYPES.map((type) => (
             <DropdownMenuCheckboxItem
               key={type.name}
-              className="flex items-center gap-2 rounded-sm-ds text-xs-ds text-foreground focus:text-foreground dark:hover:bg-popover-foreground/10! hover:bg-muted/85! cursor-pointer"
+              className="flex cursor-pointer items-center gap-2 rounded-sm-ds text-xs-ds text-foreground hover:bg-muted/85! focus:text-foreground dark:hover:bg-popover-foreground/10!"
               checked={!!activeFilters[type.type]}
               onCheckedChange={(checked) => onFilterChange(type.type, checked)}
             >
@@ -64,7 +66,7 @@ export function FilterDropdownMenu({
         <DropdownMenuGroup>
           <Button
             variant="ghost"
-            className="flex items-center font-normal rounded-sm-ds text-xs-ds text-foreground focus:text-foreground dark:hover:bg-popover-foreground/10! hover:bg-muted/85! cursor-pointer w-full justify-start p-1.5 ml-0"
+            className="ml-0 flex w-full cursor-pointer items-center justify-start rounded-sm-ds p-1.5 text-xs-ds font-normal text-foreground hover:bg-muted/85! focus:text-foreground dark:hover:bg-popover-foreground/10!"
             onClick={onClearFilters}
           >
             Clear filters

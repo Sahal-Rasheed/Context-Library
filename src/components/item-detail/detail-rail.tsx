@@ -1,4 +1,5 @@
 import Link from "next/link";
+
 import { SourceIndicator } from "@/components/library/source-indicator";
 import type { ContextItem } from "@/data";
 import { contextItems } from "@/data";
@@ -28,33 +29,27 @@ export function DetailRail({ item }: DetailRailProps) {
   });
 
   return (
-    <aside className="space-y-4 lg:mt-10 text-sm lg:divide-y lg:divide-border">
+    <aside className="space-y-4 text-sm lg:mt-10 lg:divide-y lg:divide-border">
       {/* details */}
-      <section className="flex flex-col gap-3 lg:gap-3 pb-4 pt-4 lg:pt-0">
-        <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+      <section className="flex flex-col gap-3 pt-4 pb-4 lg:gap-3 lg:pt-0">
+        <h2 className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
           Details
         </h2>
-        <dl className="grid grid-cols-[80px_1fr] gap-y-3 gap-x-8 lg:gap-x-2 text-xs">
+        <dl className="grid grid-cols-[80px_1fr] gap-x-8 gap-y-3 text-xs lg:gap-x-2">
           <dt className="text-muted-foreground">Content</dt>
-          <dd className="font-medium text-foreground capitalize">
-            {item.type}
-          </dd>
+          <dd className="font-medium text-foreground capitalize">{item.type}</dd>
 
           {item.meta?.site && (
             <>
               <dt className="text-muted-foreground">Site</dt>
-              <dd className="font-medium text-foreground font-mono truncate">
-                {item.meta.site}
-              </dd>
+              <dd className="truncate font-mono font-medium text-foreground">{item.meta.site}</dd>
             </>
           )}
 
           {item.meta?.author && (
             <>
               <dt className="text-muted-foreground">Author</dt>
-              <dd className="font-medium text-foreground">
-                {item.meta.author}
-              </dd>
+              <dd className="font-medium text-foreground">{item.meta.author}</dd>
             </>
           )}
 
@@ -69,14 +64,10 @@ export function DetailRail({ item }: DetailRailProps) {
           <dd className="font-medium text-foreground">{savedDateStr}</dd>
 
           <dt className="text-muted-foreground">Attachments</dt>
-          <dd className="font-medium text-foreground">
-            {item.attach ? item.attach.length : 0}
-          </dd>
+          <dd className="font-medium text-foreground">{item.attach ? item.attach.length : 0}</dd>
 
           <dt className="text-muted-foreground">Location</dt>
-          <dd className="font-medium text-foreground capitalize">
-            {item.folder || "Inbox"}
-          </dd>
+          <dd className="font-medium text-foreground capitalize">{item.folder || "Inbox"}</dd>
         </dl>
       </section>
 
@@ -186,7 +177,7 @@ export function DetailRail({ item }: DetailRailProps) {
       {/* related ttems (suggested) */}
       <section className="space-y-3">
         <div>
-          <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+          <h2 className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
             Related
           </h2>
           <p className="text-xs-ds text-muted-foreground">Suggested</p>
@@ -199,19 +190,19 @@ export function DetailRail({ item }: DetailRailProps) {
               <Link
                 key={rel.id}
                 href={`/library/${rel.id}`}
-                className="flex items-start gap-2.5 group"
+                className="group flex items-start gap-2.5"
               >
                 <SourceIndicator
                   title={rel.title}
                   type={rel.type}
                   url={rel.url}
-                  className="size-5 text-[10px] mt-0.5"
+                  className="mt-0.5 size-5 text-[10px]"
                 />
                 <div className="min-w-0 flex-1">
-                  <p className="text-xs font-medium text-foreground group-hover:underline underline-offset-2 transition-colors truncate pb-0.5">
+                  <p className="truncate pb-0.5 text-xs font-medium text-foreground underline-offset-2 transition-colors group-hover:underline">
                     {rel.title}
                   </p>
-                  <p className="text-xs-ds text-muted-foreground truncate">
+                  <p className="truncate text-xs-ds text-muted-foreground">
                     {sharedTags.length > 0
                       ? `Shares ${sharedTags.map((t) => `#${t}`).join(" ")}`
                       : `Same folder (${rel.folder})`}

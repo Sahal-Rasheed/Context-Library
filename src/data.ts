@@ -19,9 +19,7 @@ export const contextItems: ContextItem[] = [
       len: "14 min read",
       site: "react.dev",
     },
-    attach: [
-      { name: "rsc-boundary-diagram.png", kind: "image", size: "184 KB" },
-    ],
+    attach: [{ name: "rsc-boundary-diagram.png", kind: "image", size: "184 KB" }],
     connectedIds: ["3", "7", "5", "2"],
   },
   {
@@ -35,9 +33,7 @@ export const contextItems: ContextItem[] = [
     meta: {
       len: "1440×900 · PNG",
     },
-    attach: [
-      { name: "lighthouse-audit-rsc.png", kind: "image", size: "620 KB" },
-    ],
+    attach: [{ name: "lighthouse-audit-rsc.png", kind: "image", size: "620 KB" }],
   },
   {
     id: "3",

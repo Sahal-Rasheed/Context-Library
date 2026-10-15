@@ -1,14 +1,11 @@
 "use client";
 
-import * as React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  useForm,
-  Controller,
-  type SubmitHandler,
-  type FieldErrors,
-} from "react-hook-form";
+import { cn } from "cn";
+import * as React from "react";
+import { useForm, Controller, type SubmitHandler, type FieldErrors } from "react-hook-form";
 
+import { createItemAction } from "@/actions/items";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -22,13 +19,13 @@ import {
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { CONTENT_TYPES } from "./library-page";
 import type { ContextItemType } from "@/data";
+import { itemFormSchema, type ItemFormData } from "@/lib/schemas";
+
 import { Textarea } from "../ui/textarea";
 import { FolderCombobox } from "./folder-combobox";
+import { CONTENT_TYPES } from "./library-page";
 import { TagsInput } from "./tags-input";
-import { itemFormSchema, type ItemFormData } from "@/lib/schemas";
-import { cn } from "cn";
 
 type LibraryModalProps = {
   open: boolean;
@@ -44,7 +41,7 @@ export function LibraryModal({ open, onOpenChange }: LibraryModalProps) {
     control,
     reset,
     setValue,
-    // setError,
+    setError,
     formState: { errors, isSubmitting },
   } = useForm<ItemFormData>({
     resolver: zodResolver(itemFormSchema),
@@ -81,12 +78,16 @@ export function LibraryModal({ open, onOpenChange }: LibraryModalProps) {
     }
   }, [open, reset]);
 
-  const onSubmit: SubmitHandler<ItemFormData> = (data) => {
-    console.log("Form Data Submitted successfully:", data);
+  const onSubmit: SubmitHandler<ItemFormData> = async (data) => {
+    const result = await createItemAction(data);
 
-    // setError("root", { message: "Submission failed. Please try again." });
-    // ready for server action invocation:
-    // await saveItemAction(data);
+    if (!result.success) {
+      setError("root", {
+        message: result.message || "Failed to save item. Please try again.",
+      });
+      return;
+    }
+
     onOpenChange(false);
   };
 
@@ -96,32 +97,24 @@ export function LibraryModal({ open, onOpenChange }: LibraryModalProps) {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      {/* this makes the modal uncontrolled, to make it controlled we used  open and onOpenChange shadcn dialog props so now we has the control not shadcn */}
-      {/*<DialogTrigger
-          render={<Button variant="outline">Open Dialog</Button>}
-      />*/}
-      <DialogContent className="max-w-[90%] sm:max-w-xl md:max-w-2xl lg:max-w-3xl max-h-[90%] sm:max-h-fit rounded-md-ds border border-sidebar-border bg-sidebar text-foreground overflow-y-auto scrollbar-thin scrollbar-thumb-muted">
+      <DialogContent className="max-h-[90%] max-w-[90%] scrollbar-thin scrollbar-thumb-muted overflow-y-auto rounded-md-ds border border-sidebar-border bg-sidebar text-foreground sm:max-h-fit sm:max-w-xl md:max-w-2xl lg:max-w-3xl">
         <form onSubmit={handleSubmit(onSubmit, onError)}>
           <DialogHeader>
-            <DialogTitle className="font-semibold text-base-ds">
-              Save to library
-            </DialogTitle>
-            <DialogDescription>
-              Add this to your context library.
-            </DialogDescription>
+            <DialogTitle className="text-base-ds font-semibold">Save to library</DialogTitle>
+            <DialogDescription>Add this to your context library.</DialogDescription>
           </DialogHeader>
 
           {/* content choices for ctx saving */}
-          <div className="flex flex-wrap items-center gap-2 mb-4 mt-2">
+          <div className="mt-2 mb-4 flex flex-wrap items-center gap-2">
             {CONTENT_TYPES.map((type) => (
               <Button
                 key={type.type}
                 type="button"
                 variant="outline"
                 className={cn(
-                  "inline-flex items-center rounded-md-ds text-xs h-0 py-3.5 px-2.5 gap-1.5 transition-colors cursor-pointer",
+                  "inline-flex h-0 cursor-pointer items-center gap-1.5 rounded-md-ds px-2.5 py-3.5 text-xs transition-colors",
                   contentType === type.type
-                    ? "dark:bg-black/30 bg-neutral-400/10 dark:hover:bg-black/40 hover:bg-neutral-400/10"
+                    ? "bg-neutral-400/10 hover:bg-neutral-400/10 dark:bg-black/30 dark:hover:bg-black/40"
                     : "",
                 )}
                 onClick={() => handleTypeChange(type.type)}
@@ -136,45 +129,35 @@ export function LibraryModal({ open, onOpenChange }: LibraryModalProps) {
           <FieldGroup>
             {/* title */}
             <Field>
-              <Label
-                htmlFor="title"
-                className="text-muted-foreground font-semibold"
-              >
+              <Label htmlFor="title" className="font-semibold text-muted-foreground">
                 Title
               </Label>
               <Input
                 id="title"
                 placeholder={`Title for the ${contentType} you want to save`}
-                className="text-xs-ds rounded-sm-ds focus:outline-none focus:ring-1! focus:ring-accent! placeholder:text-xs-ds placeholder:tracking-wide placeholder:text-muted-foreground"
+                className="rounded-sm-ds text-xs-ds placeholder:text-xs-ds placeholder:tracking-wide placeholder:text-muted-foreground focus:ring-1! focus:ring-accent! focus:outline-none"
                 {...register("title")}
               />
               {errors.title && (
-                <span className="text-xs text-destructive mt-1">
-                  {errors.title.message}
-                </span>
+                <span className="mt-1 text-xs text-destructive">{errors.title.message}</span>
               )}
             </Field>
 
             {/* link -> url */}
             {contentType === "link" && (
               <Field>
-                <Label
-                  htmlFor="url"
-                  className="text-muted-foreground font-semibold"
-                >
+                <Label htmlFor="url" className="font-semibold text-muted-foreground">
                   Link
                 </Label>
                 <Input
                   id="url"
                   type="url"
                   placeholder="https://example.com/article"
-                  className="text-xs-ds rounded-sm-ds focus:outline-none focus:ring-1! focus:ring-accent! placeholder:text-xs-ds placeholder:tracking-wide placeholder:text-muted-foreground"
+                  className="rounded-sm-ds text-xs-ds placeholder:text-xs-ds placeholder:tracking-wide placeholder:text-muted-foreground focus:ring-1! focus:ring-accent! focus:outline-none"
                   {...register("url")}
                 />
                 {"url" in errors && errors.url && (
-                  <span className="text-xs text-destructive mt-1">
-                    {errors.url?.message}
-                  </span>
+                  <span className="mt-1 text-xs text-destructive">{errors.url?.message}</span>
                 )}
               </Field>
             )}
@@ -182,22 +165,17 @@ export function LibraryModal({ open, onOpenChange }: LibraryModalProps) {
             {/* note -> body */}
             {contentType === "note" && (
               <Field>
-                <FieldLabel
-                  htmlFor="body"
-                  className="text-muted-foreground font-semibold"
-                >
+                <FieldLabel htmlFor="body" className="font-semibold text-muted-foreground">
                   Note
                 </FieldLabel>
                 <Textarea
                   id="body"
                   placeholder="What is this useful for? When will you need it again?"
-                  className="text-xs-ds rounded-sm-ds focus:outline-none focus:ring-1! focus:ring-accent! placeholder:text-xs-ds placeholder:tracking-wide placeholder:text-muted-foreground h-50 max-h-50 overflow-y-auto scrollbar-thin scrollbar-thumb-neutral-400/20"
+                  className="h-50 max-h-50 scrollbar-thin scrollbar-thumb-neutral-400/20 overflow-y-auto rounded-sm-ds text-xs-ds placeholder:text-xs-ds placeholder:tracking-wide placeholder:text-muted-foreground focus:ring-1! focus:ring-accent! focus:outline-none"
                   {...register("body")}
                 />
                 {"body" in errors && errors.body && (
-                  <span className="text-xs text-destructive mt-1">
-                    {errors.body?.message}
-                  </span>
+                  <span className="mt-1 text-xs text-destructive">{errors.body?.message}</span>
                 )}
               </Field>
             )}
@@ -205,75 +183,57 @@ export function LibraryModal({ open, onOpenChange }: LibraryModalProps) {
             {/* snippet -> code */}
             {contentType === "snippet" && (
               <Field>
-                <FieldLabel
-                  htmlFor="code"
-                  className="text-muted-foreground font-semibold"
-                >
+                <FieldLabel htmlFor="code" className="font-semibold text-muted-foreground">
                   Code Snippet
                 </FieldLabel>
                 <Textarea
                   id="code"
                   placeholder="Paste or write the code snippet you want to save"
-                  className="text-xs-ds font-mono rounded-sm-ds focus:outline-none focus:ring-1! focus:ring-accent! placeholder:text-xs-ds placeholder:tracking-wide placeholder:font-sans placeholder:text-muted-foreground h-44 max-h-44 overflow-y-auto scrollbar-thin scrollbar-thumb-neutral-400/20"
+                  className="h-44 max-h-44 scrollbar-thin scrollbar-thumb-neutral-400/20 overflow-y-auto rounded-sm-ds font-mono text-xs-ds placeholder:font-sans placeholder:text-xs-ds placeholder:tracking-wide placeholder:text-muted-foreground focus:ring-1! focus:ring-accent! focus:outline-none"
                   {...register("code")}
                 />
                 {"code" in errors && errors.code && (
-                  <span className="text-xs text-destructive mt-1">
-                    {errors.code?.message}
-                  </span>
+                  <span className="mt-1 text-xs text-destructive">{errors.code?.message}</span>
                 )}
               </Field>
             )}
 
             {/* description */}
             <Field>
-              <FieldLabel
-                htmlFor="description"
-                className="text-muted-foreground font-semibold"
-              >
+              <FieldLabel htmlFor="description" className="font-semibold text-muted-foreground">
                 Description
               </FieldLabel>
               <Textarea
                 id="description"
                 placeholder={`Add a description for the ${contentType} you want to save`}
-                className="text-xs-ds rounded-sm-ds focus:outline-none focus:ring-1! focus:ring-accent! placeholder:text-xs-ds placeholder:tracking-wide placeholder:text-muted-foreground"
+                className="rounded-sm-ds text-xs-ds placeholder:text-xs-ds placeholder:tracking-wide placeholder:text-muted-foreground focus:ring-1! focus:ring-accent! focus:outline-none"
                 {...register("description")}
               />
               {errors.description && (
-                <span className="text-xs text-destructive mt-1">
-                  {errors.description.message}
-                </span>
+                <span className="mt-1 text-xs text-destructive">{errors.description.message}</span>
               )}
             </Field>
 
             {/* context */}
             <Field>
-              <FieldLabel
-                htmlFor="ctx"
-                className="text-muted-foreground font-semibold"
-              >
+              <FieldLabel htmlFor="ctx" className="font-semibold text-muted-foreground">
                 Why are you saving this? [Context]
               </FieldLabel>
               <Textarea
                 id="ctx"
                 placeholder="What is this useful for? When will you need it again?"
-                className="text-xs-ds rounded-sm-ds focus:outline-none focus:ring-1! focus:ring-accent! placeholder:text-xs-ds placeholder:tracking-wide placeholder:text-muted-foreground h-25"
+                className="h-25 rounded-sm-ds text-xs-ds placeholder:text-xs-ds placeholder:tracking-wide placeholder:text-muted-foreground focus:ring-1! focus:ring-accent! focus:outline-none"
                 {...register("ctx")}
               />
               {errors.ctx && (
-                <span className="text-xs text-destructive mt-1">
-                  {errors.ctx.message}
-                </span>
+                <span className="mt-1 text-xs text-destructive">{errors.ctx.message}</span>
               )}
             </Field>
 
             {/* folder and tags in 2-column layout */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
               <Field>
-                <FieldLabel
-                  htmlFor="folder"
-                  className="text-muted-foreground font-semibold"
-                >
+                <FieldLabel htmlFor="folder" className="font-semibold text-muted-foreground">
                   Folder
                 </FieldLabel>
                 <Controller
@@ -288,17 +248,12 @@ export function LibraryModal({ open, onOpenChange }: LibraryModalProps) {
                   )}
                 />
                 {errors.folder && (
-                  <span className="text-xs text-destructive mt-1">
-                    {errors.folder.message}
-                  </span>
+                  <span className="mt-1 text-xs text-destructive">{errors.folder.message}</span>
                 )}
               </Field>
 
               <Field>
-                <FieldLabel
-                  htmlFor="tags"
-                  className="text-muted-foreground font-semibold"
-                >
+                <FieldLabel htmlFor="tags" className="font-semibold text-muted-foreground">
                   Tags
                 </FieldLabel>
                 <Controller
@@ -317,13 +272,11 @@ export function LibraryModal({ open, onOpenChange }: LibraryModalProps) {
 
             {/* root/global error */}
             {errors.root && (
-              <span className="text-xs text-destructive mx-auto">
-                {errors.root.message}
-              </span>
+              <span className="mx-auto text-xs text-destructive">{errors.root.message}</span>
             )}
           </FieldGroup>
 
-          <DialogFooter className="mt-4 p-4 border-t border-input flex items-center justify-end gap-2">
+          <DialogFooter className="mt-4 flex items-center justify-end gap-2 border-t border-input p-4">
             <DialogClose render={<Button variant="outline">Cancel</Button>} />
             <Button type="submit" disabled={isSubmitting}>
               {isSubmitting ? "Saving Changes..." : "Save Changes"}

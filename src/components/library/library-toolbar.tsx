@@ -1,12 +1,14 @@
 "use client";
 
-import * as React from "react";
 import { X, Folder } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { FilterDropdownMenu } from "./filter-dropdown";
-import ViewSwitcher from "./view-switcher";
-import { SortDropdownMenu } from "./sort-dropdown";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import * as React from "react";
+
+import { Badge } from "@/components/ui/badge";
+
+import { FilterDropdownMenu } from "./filter-dropdown";
+import { SortDropdownMenu } from "./sort-dropdown";
+import ViewSwitcher from "./view-switcher";
 
 type LibraryToolbarProps = {
   title: string;
@@ -22,11 +24,7 @@ const FILTER_LABELS: Record<string, string> = {
   image: "Image",
 };
 
-export default function LibraryToolbar({
-  title,
-  count,
-  view,
-}: LibraryToolbarProps) {
+export default function LibraryToolbar({ title, count, view }: LibraryToolbarProps) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -74,11 +72,11 @@ export default function LibraryToolbar({
   const activeFilterCount = activeTypeArray.length;
 
   return (
-    <section className="py-4 border-b border-sidebar-border">
+    <section className="border-b border-sidebar-border py-4">
       {/* top section */}
       <div className="flex items-center justify-between">
         <div className="flex flex-col items-start justify-center">
-          <h1 className="text-lg tracking-wide text-foreground font-semibold capitalize flex items-center gap-2">
+          <h1 className="flex items-center gap-2 text-lg font-semibold tracking-wide text-foreground capitalize">
             {searchParams.get("folder") && (
               <span className="text-muted-foreground/80">
                 <Folder className="size-4.5" />
@@ -104,16 +102,16 @@ export default function LibraryToolbar({
 
       {/* bottom filter badges */}
       {activeFilterCount > 0 && (
-        <div className="flex items-center gap-2 mt-3 flex-wrap">
+        <div className="mt-3 flex flex-wrap items-center gap-2">
           {activeTypeArray.map((filterKey) => (
             <Badge
               key={filterKey}
               variant="outline"
-              className="bg-accent/10 text-accent-foreground border-accent/30 flex justify-between items-center gap-1.5 py-0.5 text-xs-ds"
+              className="flex items-center justify-between gap-1.5 border-accent/30 bg-accent/10 py-0.5 text-xs-ds text-accent-foreground"
             >
               <span>{FILTER_LABELS[filterKey] || filterKey}</span>
               <span
-                className="p-px rounded-full hover:bg-muted-foreground/35 text-sky-800 dark:text-accent-foreground cursor-pointer"
+                className="cursor-pointer rounded-full p-px text-sky-800 hover:bg-muted-foreground/35 dark:text-accent-foreground"
                 onClick={() => handleFilterChange(filterKey, false)}
                 title={`Remove ${filterKey}`}
               >
@@ -124,7 +122,7 @@ export default function LibraryToolbar({
 
           <button
             type="button"
-            className="text-xs-ds text-muted-foreground hover:text-foreground ml-1 font-medium cursor-pointer"
+            className="ml-1 cursor-pointer text-xs-ds font-medium text-muted-foreground hover:text-foreground"
             onClick={handleClearFilters}
           >
             Clear all

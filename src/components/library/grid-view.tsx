@@ -1,13 +1,15 @@
-import type { ContextItem } from "@/data";
-import { formatTimeAgo } from "@/lib/utils";
-import { SourceIndicator } from "./source-indicator";
-import { Badge } from "../ui/badge";
 import { Folder, Star } from "lucide-react";
 import Link from "next/link";
 
+import type { ContextItem } from "@/data";
+import { formatTimeAgo } from "@/lib/utils";
+
+import { Badge } from "../ui/badge";
+import { SourceIndicator } from "./source-indicator";
+
 export function GridView({ items }: { items: ContextItem[] }) {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-2">
+    <div className="mt-2 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
       {items.map((item) => (
         <GridItem key={item.id} item={item} />
       ))}
@@ -24,14 +26,10 @@ function GridItem({ item }: { item: ContextItem }) {
       return item.meta?.len ? `Note • ${item.meta.len}` : "Note";
     }
     if (item.type === "snippet") {
-      return item.meta?.lang
-        ? `${item.meta.lang} • ${item.meta.len ?? ""}`
-        : "Snippet";
+      return item.meta?.lang ? `${item.meta.lang} • ${item.meta.len ?? ""}` : "Snippet";
     }
     if (item.type === "chat") {
-      return item.meta?.source
-        ? `${item.meta.source} • ${item.meta.len ?? ""}`
-        : "Chat";
+      return item.meta?.source ? `${item.meta.source} • ${item.meta.len ?? ""}` : "Chat";
     }
     if (item.url) {
       try {
@@ -48,64 +46,55 @@ function GridItem({ item }: { item: ContextItem }) {
   return (
     <Link
       href={`/library/${item.id}`}
-      className="flex flex-col justify-between gap-3 bg-card border border-border p-3 rounded-md-ds hover:bg-muted/60 hover:border-input transition-colors min-h-52 h-full group"
+      className="group flex h-full min-h-52 flex-col justify-between gap-3 rounded-md-ds border border-border bg-card p-3 transition-colors hover:border-input hover:bg-muted/60"
     >
       {/* top section: indicator + source/meta + star + title + desc + ctx */}
       <div className="flex flex-col gap-2.5">
         {/* source indicator + meta info */}
         <div className="flex items-center justify-between gap-2">
-          <div className="flex items-center gap-2 min-w-0">
+          <div className="flex min-w-0 items-center gap-2">
             <SourceIndicator
               title={item.title}
               type={item.type}
               url={item.url}
               className="size-5.5"
             />
-            <span className="text-muted-foreground text-xs truncate font-mono">
-              {getSubMeta()}
-            </span>
+            <span className="truncate font-mono text-xs text-muted-foreground">{getSubMeta()}</span>
           </div>
 
           {/* favorite */}
           <div className="shrink-0 text-muted-foreground">
-            {item.fav && (
-              <Star className="size-3.5 fill-foreground text-foreground" />
-            )}
+            {item.fav && <Star className="size-3.5 fill-foreground text-foreground" />}
             {!item.fav && (
-              <Star className="size-3.5 opacity-0 group-hover:opacity-40 transition-opacity" />
+              <Star className="size-3.5 opacity-0 transition-opacity group-hover:opacity-40" />
             )}
           </div>
         </div>
 
         {/* title */}
-        <h2 className="text-md-ds font-semibold text-foreground line-clamp-1">
-          {item.title}
-        </h2>
+        <h2 className="line-clamp-1 text-md-ds font-semibold text-foreground">{item.title}</h2>
 
         {/* desc */}
-        <p
-          className="text-md-ds text-muted-foreground line-clamp-2"
-          title={item.desc}
-        >
+        <p className="line-clamp-2 text-md-ds text-muted-foreground" title={item.desc}>
           {item.desc}
         </p>
 
         {/* ctx */}
         {item.ctx && (
-          <div className="font-serif tracking-wide text-lg-sm-ds text-foreground font-medium bg-linear-to-r from-amber-500/15 via-amber-700/10 to-transparent px-1.5 py-0.5 shadow-[inset_2px_0px_0px_#B8931A] line-clamp-4">
+          <div className="line-clamp-4 bg-linear-to-r from-amber-500/15 via-amber-700/10 to-transparent px-1.5 py-0.5 font-serif text-lg-sm-ds font-medium tracking-wide text-foreground shadow-[inset_2px_0px_0px_#B8931A]">
             {item.ctx}
           </div>
         )}
       </div>
 
       {/* footer section: folder + tags + time */}
-      <div className="flex justify-between items-end mt-auto pt-2">
-        <div className="flex gap-1.5 flex-wrap items-center max-w-[75%]">
+      <div className="mt-auto flex items-end justify-between pt-2">
+        <div className="flex max-w-[75%] flex-wrap items-center gap-1.5">
           {/* folder */}
           {item.folder && (
             <Badge
               variant="outline"
-              className="bg-background text-muted-foreground border border-border rounded-sm-ds text-xs flex items-center gap-1 capitalize whitespace-nowrap"
+              className="flex items-center gap-1 rounded-sm-ds border border-border bg-background text-xs whitespace-nowrap text-muted-foreground capitalize"
             >
               <Folder className="size-3" />
               {item.folder}
@@ -117,7 +106,7 @@ function GridItem({ item }: { item: ContextItem }) {
             <Badge
               key={index}
               variant="secondary"
-              className="dark:bg-black/75 bg-neutral-400/10 text-xs-ds rounded-sm-ds text-muted-foreground dark:hover:bg-muted hover:bg-neutral-400/40 hover:text-foreground whitespace-nowrap"
+              className="rounded-sm-ds bg-neutral-400/10 text-xs-ds whitespace-nowrap text-muted-foreground hover:bg-neutral-400/40 hover:text-foreground dark:bg-black/75 dark:hover:bg-muted"
             >
               #{tag}
             </Badge>
@@ -125,17 +114,13 @@ function GridItem({ item }: { item: ContextItem }) {
 
           {/* tags left */}
           {extraTagsCount > 0 && (
-            <span className="text-xs-ds text-muted-foreground font-medium">
-              +{extraTagsCount}
-            </span>
+            <span className="text-xs-ds font-medium text-muted-foreground">+{extraTagsCount}</span>
           )}
         </div>
 
         {/* time */}
-        <div className="text-xs text-muted-foreground shrink-0 pb-0.5 self-end">
-          <span className="whitespace-nowrap">
-            {formatTimeAgo(item.savedAt)}
-          </span>
+        <div className="shrink-0 self-end pb-0.5 text-xs text-muted-foreground">
+          <span className="whitespace-nowrap">{formatTimeAgo(item.savedAt)}</span>
         </div>
       </div>
     </Link>

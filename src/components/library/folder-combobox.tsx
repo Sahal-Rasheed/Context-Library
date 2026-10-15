@@ -1,6 +1,7 @@
 "use client";
 
 import { Folder } from "lucide-react";
+
 import {
   Combobox,
   ComboboxContent,
@@ -24,11 +25,7 @@ interface FolderComboboxProps {
   disabled?: boolean;
 }
 
-export function FolderCombobox({
-  value = "",
-  onChange,
-  disabled = false,
-}: FolderComboboxProps) {
+export function FolderCombobox({ value = "", onChange, disabled = false }: FolderComboboxProps) {
   return (
     <Combobox
       items={DEFAULT_FOLDERS}
@@ -41,7 +38,7 @@ export function FolderCombobox({
       <ComboboxInput
         id="folder"
         placeholder="Select a folder"
-        className="min-h-10.5 text-xs-ds rounded-sm-ds placeholder:text-xs-ds placeholder:tracking-wide placeholder:text-muted-foreground"
+        className="min-h-10.5 rounded-sm-ds text-xs-ds placeholder:text-xs-ds placeholder:tracking-wide placeholder:text-muted-foreground"
       />
       <ComboboxContent className="w-55.75" sideOffset={10}>
         <ComboboxEmpty>No folders found.</ComboboxEmpty>
@@ -50,7 +47,7 @@ export function FolderCombobox({
             <ComboboxItem
               key={item}
               value={item}
-              className="text-sm tracking-wide text-foreground cursor-pointer rounded-sm-ds"
+              className="cursor-pointer rounded-sm-ds text-sm tracking-wide text-foreground"
             >
               <Folder className="size-4 text-muted-foreground dark:focus:text-muted-foreground!" />
               {item}

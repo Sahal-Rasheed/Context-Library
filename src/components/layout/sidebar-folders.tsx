@@ -1,12 +1,13 @@
 "use client";
 
-import Link from "next/link";
 import { Folder } from "lucide-react";
-import { useState } from "react";
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { cn } from "@/lib/utils";
-import { contextItems } from "@/data";
+import { useState } from "react";
+
 import { useSidebar } from "@/context/sidebar-context";
+import { contextItems } from "@/data";
+import { cn } from "@/lib/utils";
 
 const FOLDER_LIST = [
   { name: "Frontend", slug: "frontend" },
@@ -45,18 +46,14 @@ export default function SidebarFolders() {
       href: `/?folder=${f.slug}`,
       active: currentFolder === f.slug.toLowerCase(),
     };
-  }).filter((f) =>
-    f.name.toLowerCase().includes(searchQuery.toLowerCase().trim()),
-  );
+  }).filter((f) => f.name.toLowerCase().includes(searchQuery.toLowerCase().trim()));
 
   return (
     <div className="flex flex-col gap-1 select-none">
-      <div className="flex items-center justify-between pl-2 pr-1">
-        <span className="text-xs font-semibold text-muted-foreground">
-          Folders
-        </span>
+      <div className="flex items-center justify-between pr-1 pl-2">
+        <span className="text-xs font-semibold text-muted-foreground">Folders</span>
         <button
-          className="text-xl text-muted-foreground rounded-md hover:bg-muted hover:text-primary px-2 cursor-pointer leading-none"
+          className="cursor-pointer rounded-md px-2 text-xl leading-none text-muted-foreground hover:bg-muted hover:text-primary"
           title="New Folder"
           // using onMouseDown and preventDefault to stop the input's onBlur from fighting with this button click
           onMouseDown={(e) => {
@@ -73,7 +70,7 @@ export default function SidebarFolders() {
           <input
             type="text"
             placeholder="Search folders..."
-            className="text-xs px-2 py-1 rounded-sm-ds border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-accent w-full placeholder:text-sm-ds"
+            className="w-full rounded-sm-ds border border-border bg-background px-2 py-1 text-xs text-foreground placeholder:text-sm-ds focus:ring-2 focus:ring-accent focus:outline-none"
             autoFocus
             onChange={handleSearchInput}
             value={searchQuery}
@@ -89,15 +86,15 @@ export default function SidebarFolders() {
             href={item.href}
             onClick={closeSidebar}
             className={cn(
-              "flex items-center justify-between text-sm px-2 py-1.5 rounded-md-ds text-muted-foreground hover:bg-muted hover:text-primary transition-colors",
-              item.active ? "bg-muted text-primary font-semibold" : "",
+              "flex items-center justify-between rounded-md-ds px-2 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-primary",
+              item.active ? "bg-muted font-semibold text-primary" : "",
             )}
           >
             <span className="flex items-center gap-2.5 truncate">
               <Folder className="size-4 shrink-0" />
               <span className="truncate">{item.name}</span>
             </span>
-            <span className="text-md-ds text-muted-foreground font-medium shrink-0 ml-auto">
+            <span className="ml-auto shrink-0 text-md-ds font-medium text-muted-foreground">
               {item.count}
             </span>
           </Link>

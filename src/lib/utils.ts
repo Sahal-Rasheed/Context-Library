@@ -18,10 +18,7 @@ export function formatTimeAgo(isoString: string): string {
   const rtf = new Intl.RelativeTimeFormat("en", { numeric: "auto" });
 
   for (const interval of intervals) {
-    if (
-      Math.abs(secondsDelta) >= interval.seconds ||
-      interval.unit === "second"
-    ) {
+    if (Math.abs(secondsDelta) >= interval.seconds || interval.unit === "second") {
       const value = Math.round(secondsDelta / interval.seconds);
       return rtf.format(value, interval.unit);
     }
