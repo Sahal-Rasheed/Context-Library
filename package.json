@@ -12,6 +12,8 @@
     "db:deploy": "prisma migrate deploy",
     "db:reset": "prisma migrate reset",
     "db:status": "prisma migrate status",
+    "db:format": "prisma format",
+    "db:validate": "prisma validate",
     "db:studio": "prisma studio",
     "db:seed": "prisma db seed",
     "db:push": "prisma db push",
