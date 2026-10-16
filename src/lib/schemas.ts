@@ -9,28 +9,29 @@ const baseItemSchema = z.object({
     .max(100, "Title must not exceed 100 characters"),
   description: z.string().max(500, "Description too long"),
   ctx: z.string().max(500, "Context too long"),
-  folder: z.string().min(1, "Please select a folder"),
+  folder: z.string().optional(), // optional: an empty folder means the item lands in the Inbox
   tags: z.array(z.string()), // will be [] if no tags are provided, we set that in useForm hook 'defaultValues'
 });
 
 export const itemFormSchema = z.discriminatedUnion("type", [
   baseItemSchema.extend({
-    type: z.literal("link"),
+    type: z.literal("LINK"),
     url: z.url("Please enter a valid URL (e.g. https://...)"),
   }),
   baseItemSchema.extend({
-    type: z.literal("snippet"),
+    type: z.literal("SNIPPET"),
+    language: z.string().min(1, "Language is required"),
     code: z.string().min(1, "Code snippet is required"),
   }),
   baseItemSchema.extend({
-    type: z.literal("note"),
+    type: z.literal("NOTE"),
     body: z.string().min(1, "Note body is required"),
   }),
   baseItemSchema.extend({
-    type: z.literal("chat"),
-  }),
-  baseItemSchema.extend({
-    type: z.literal("image"),
+    type: z.literal("AI_CONVERSATION"),
+    provider: z.string().min(1, "Provider is required"),
+    originalUrl: z.url("Please enter a valid URL (e.g. https://...)"),
+    transcript: z.string().min(1, "Transcript is required"),
   }),
 ]);
 
