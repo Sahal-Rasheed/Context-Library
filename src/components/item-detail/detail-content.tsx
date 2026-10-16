@@ -4,7 +4,7 @@ import { Copy, Check } from "lucide-react";
 import * as React from "react";
 
 import { Button } from "@/components/ui/button";
-import type { ContextItem } from "@/data";
+import type { ContextItem } from "@/types/item";
 
 interface DetailContentProps {
   item: ContextItem;
@@ -15,7 +15,7 @@ export function DetailContent({ item }: DetailContentProps) {
 
   const handleCopyCode = () => {
     if (item.code) {
-      navigator.clipboard.writeText(item.code);
+      void navigator.clipboard.writeText(item.code);
     }
     setCopyButtonText("Copied!");
 
@@ -36,7 +36,7 @@ export function DetailContent({ item }: DetailContentProps) {
       )}
 
       {/* code snippet block if item is snippet */}
-      {item.type === "snippet" && item.code && (
+      {item.type === "SNIPPET" && item.code && (
         <section className="space-y-2">
           <div className="flex items-center justify-between">
             <h2 className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
@@ -63,7 +63,7 @@ export function DetailContent({ item }: DetailContentProps) {
       )}
 
       {/* note body if item is note */}
-      {item.type === "note" && item.body && (
+      {item.type === "NOTE" && item.body && (
         <section className="space-y-2">
           <h2 className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
             Note
