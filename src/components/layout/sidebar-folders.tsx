@@ -1,52 +1,50 @@
 "use client";
 
-import { Folder } from "lucide-react";
+import { Folder, Plus } from "lucide-react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
+import { createFolderAction } from "@/actions/folders";
 import { useSidebar } from "@/context/sidebar-context";
-import { contextItems } from "@/data";
 import { cn } from "@/lib/utils";
+import type { SidebarFolder } from "@/types/item";
 
-const FOLDER_LIST = [
-  { name: "Frontend", slug: "frontend" },
-  { name: "Data & Backend", slug: "data" },
-  { name: "Architecture", slug: "arch" },
-  { name: "Tooling & DX", slug: "tooling" },
-  { name: "Learning", slug: "learning" },
-];
-
-export default function SidebarFolders() {
+export default function SidebarFolders({ folders }: { folders: SidebarFolder[] }) {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const { closeSidebar } = useSidebar();
   const currentFolder = searchParams.get("folder")?.toLowerCase();
 
-  const [isSearchOpen, setSearchOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [draft, setDraft] = useState("");
+  const [isComposerOpen, setComposerOpen] = useState(false);
+  const [isCreating, setIsCreating] = useState(false);
 
-  const handleSearchToggle = () => {
-    setSearchOpen((prev) => {
-      if (prev) setSearchQuery(""); // reset query when closing
-      return !prev;
-    });
+  const query = draft.trim().toLowerCase();
+  const filteredFolders = query
+    ? folders.filter((folder) => folder.name.toLowerCase().includes(query))
+    : folders;
+  const hasExactMatch = folders.some((folder) => folder.name.toLowerCase() === query);
+  const canCreate = query.length > 0 && !hasExactMatch;
+
+  const closeComposer = () => {
+    setComposerOpen(false);
+    setDraft("");
   };
 
-  const handleSearchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(e.target.value);
-  };
+  const handleCreate = async () => {
+    const name = draft.trim();
+    if (!name || isCreating) return;
 
-  const foldersWithCounts = FOLDER_LIST.map((f) => {
-    const count = contextItems.filter(
-      (item) => item.folder?.toLowerCase() === f.slug.toLowerCase(),
-    ).length;
-    return {
-      ...f,
-      count,
-      href: `/?folder=${f.slug}`,
-      active: currentFolder === f.slug.toLowerCase(),
-    };
-  }).filter((f) => f.name.toLowerCase().includes(searchQuery.toLowerCase().trim()));
+    setIsCreating(true);
+    const result = await createFolderAction(name);
+    setIsCreating(false);
+
+    if (result.success) {
+      closeComposer();
+      router.refresh();
+    }
+  };
 
   return (
     <div className="flex flex-col gap-1 select-none">
@@ -54,51 +52,90 @@ export default function SidebarFolders() {
         <span className="text-xs font-semibold text-muted-foreground">Folders</span>
         <button
           className="cursor-pointer rounded-md px-2 text-xl leading-none text-muted-foreground hover:bg-muted hover:text-primary"
-          title="New Folder"
+          title="New folder"
           // using onMouseDown and preventDefault to stop the input's onBlur from fighting with this button click
           onMouseDown={(e) => {
             e.preventDefault();
-            handleSearchToggle();
+            if (isComposerOpen) {
+              closeComposer();
+            } else {
+              setComposerOpen(true);
+            }
           }}
         >
           +
         </button>
       </div>
 
-      {isSearchOpen && (
-        <div className="flex flex-1 px-1 py-1">
+      {isComposerOpen && (
+        <div className="flex flex-1 gap-1 px-1 py-1">
           <input
             type="text"
-            placeholder="Search folders..."
+            placeholder="Create or search folders..."
             className="w-full rounded-sm-ds border border-border bg-background px-2 py-1 text-xs text-foreground placeholder:text-sm-ds focus:ring-2 focus:ring-accent focus:outline-none"
             autoFocus
-            onChange={handleSearchInput}
-            value={searchQuery}
-            onBlur={handleSearchToggle}
+            value={draft}
+            onChange={(e) => setDraft(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                if (canCreate) {
+                  void handleCreate();
+                }
+              } else if (e.key === "Escape") {
+                closeComposer();
+              }
+            }}
+            onBlur={closeComposer}
           />
         </div>
       )}
 
       <nav className="flex flex-col gap-1">
-        {foldersWithCounts.map((item) => (
-          <Link
-            key={item.slug}
-            href={item.href}
-            onClick={closeSidebar}
-            className={cn(
-              "flex items-center justify-between rounded-md-ds px-2 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-primary",
-              item.active ? "bg-muted font-semibold text-primary" : "",
-            )}
+        {isComposerOpen && canCreate && (
+          <button
+            type="button"
+            className="flex items-center gap-2.5 rounded-md-ds px-2 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-primary disabled:opacity-50"
+            disabled={isCreating}
+            // prevent the input's onBlur from firing before the click handler
+            onMouseDown={(e) => {
+              e.preventDefault();
+              void handleCreate();
+            }}
           >
-            <span className="flex items-center gap-2.5 truncate">
-              <Folder className="size-4 shrink-0" />
-              <span className="truncate">{item.name}</span>
-            </span>
-            <span className="ml-auto shrink-0 text-md-ds font-medium text-muted-foreground">
-              {item.count}
-            </span>
-          </Link>
-        ))}
+            <Plus className="size-4 shrink-0" />
+            <span className="truncate">Create &quot;{draft.trim()}&quot;</span>
+          </button>
+        )}
+
+        {filteredFolders.map((folder) => {
+          const isActive = currentFolder === folder.name.toLowerCase();
+          return (
+            <Link
+              key={folder.id}
+              href={`/?folder=${encodeURIComponent(folder.name)}`}
+              onClick={closeSidebar}
+              className={cn(
+                "flex items-center justify-between rounded-md-ds px-2 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-primary",
+                isActive ? "bg-muted font-semibold text-primary" : "",
+              )}
+            >
+              <span className="flex items-center gap-2.5 truncate">
+                <Folder className="size-4 shrink-0" />
+                <span className="truncate">{folder.name}</span>
+              </span>
+              <span className="ml-auto shrink-0 text-md-ds font-medium text-muted-foreground">
+                {folder.count}
+              </span>
+            </Link>
+          );
+        })}
+
+        {filteredFolders.length === 0 && !canCreate && (
+          <p className="px-2 py-1 text-xs text-muted-foreground">
+            {folders.length === 0 ? "No folders yet." : "No folders found."}
+          </p>
+        )}
       </nav>
     </div>
   );
