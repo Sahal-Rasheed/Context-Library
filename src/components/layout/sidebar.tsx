@@ -5,22 +5,23 @@ import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 
 import { useSidebar } from "@/context/sidebar-context";
-import { contextItems } from "@/data";
 import { cn } from "@/lib/utils";
+import type { SidebarCounts, SidebarFolder, SidebarTag } from "@/types/item";
 
 import SidebarFolders from "./sidebar-folders";
 import SidebarTags from "./sidebar-tags";
 
-export default function Sidebar() {
+interface SidebarProps {
+  counts: SidebarCounts;
+  folders: SidebarFolder[];
+  tags: SidebarTag[];
+}
+
+export default function Sidebar({ counts, folders, tags }: SidebarProps) {
   const { isOpen, closeSidebar } = useSidebar();
 
   const pathname = usePathname();
   const searchParams = useSearchParams();
-
-  const totalCount = contextItems.length;
-  const favoritesCount = contextItems.filter((i) => i.fav).length;
-  const inboxCount = contextItems.filter((i) => !i.folder).length;
-  const archivedCount = contextItems.filter((i) => i.archived).length;
 
   const currentSection = searchParams.get("section");
   const currentFolder = searchParams.get("folder");
@@ -31,21 +32,21 @@ export default function Sidebar() {
       name: "Inbox",
       href: "/?section=inbox",
       logo: <Inbox className="size-4" />,
-      count: inboxCount,
+      count: counts.inbox,
       active: currentSection === "inbox",
     },
     {
       name: "All items",
       href: "/",
       logo: <Layers className="size-4" />,
-      count: totalCount,
+      count: counts.total,
       active: pathname === "/" && !currentSection && !currentFolder && !currentTag,
     },
     {
       name: "Favorites",
       href: "/?section=favorites",
       logo: <Star className="size-4" />,
-      count: favoritesCount,
+      count: counts.favorites,
       active: currentSection === "favorites",
     },
   ];
@@ -113,10 +114,10 @@ export default function Sidebar() {
           </nav>
 
           {/* folders */}
-          <SidebarFolders />
+          <SidebarFolders folders={folders} />
 
           {/* tags */}
-          <SidebarTags />
+          <SidebarTags tags={tags} />
         </div>
 
         {/* bottom footer nav */}
@@ -128,7 +129,7 @@ export default function Sidebar() {
           >
             <Archive className="size-3.5" />
             <span>Archived</span>
-            <span className="ml-auto text-xs-ds">{archivedCount}</span>
+            <span className="ml-auto text-xs-ds">{counts.archived}</span>
           </Link>
         </div>
       </aside>
