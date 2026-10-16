@@ -19,8 +19,8 @@ import {
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import type { ContextItemType } from "@/data";
 import { itemFormSchema, type ItemFormData } from "@/lib/schemas";
+import type { ContextItemType } from "@/types/item";
 
 import { Textarea } from "../ui/textarea";
 import { FolderCombobox } from "./folder-combobox";
@@ -33,7 +33,7 @@ type LibraryModalProps = {
 };
 
 export function LibraryModal({ open, onOpenChange }: LibraryModalProps) {
-  const [contentType, setContentType] = React.useState<ContextItemType>("link");
+  const [contentType, setContentType] = React.useState<ContextItemType>("LINK");
 
   const {
     register,
@@ -46,7 +46,7 @@ export function LibraryModal({ open, onOpenChange }: LibraryModalProps) {
   } = useForm<ItemFormData>({
     resolver: zodResolver(itemFormSchema),
     defaultValues: {
-      type: "link",
+      type: "LINK",
       title: "",
       url: "",
       description: "",
@@ -59,6 +59,7 @@ export function LibraryModal({ open, onOpenChange }: LibraryModalProps) {
   // keep type in sync with selected pill
   // and reset form when type switches using `setValue` from `useForm` hook
   const handleTypeChange = (type: ContextItemType) => {
+    if (type === "IMAGE") return; // not persistable yet
     setContentType(type);
     setValue("type", type);
   };
@@ -67,7 +68,7 @@ export function LibraryModal({ open, onOpenChange }: LibraryModalProps) {
   React.useEffect(() => {
     if (!open) {
       reset({
-        type: "link",
+        type: "LINK",
         title: "",
         url: "",
         description: "",
@@ -118,7 +119,7 @@ export function LibraryModal({ open, onOpenChange }: LibraryModalProps) {
                     : "",
                 )}
                 onClick={() => handleTypeChange(type.type)}
-                disabled={type.type === "image"}
+                disabled={type.type === "IMAGE"}
               >
                 {type.icon}
                 <span>{type.name}</span>
@@ -144,7 +145,7 @@ export function LibraryModal({ open, onOpenChange }: LibraryModalProps) {
             </Field>
 
             {/* link -> url */}
-            {contentType === "link" && (
+            {contentType === "LINK" && (
               <Field>
                 <Label htmlFor="url" className="font-semibold text-muted-foreground">
                   Link
@@ -163,7 +164,7 @@ export function LibraryModal({ open, onOpenChange }: LibraryModalProps) {
             )}
 
             {/* note -> body */}
-            {contentType === "note" && (
+            {contentType === "NOTE" && (
               <Field>
                 <FieldLabel htmlFor="body" className="font-semibold text-muted-foreground">
                   Note
@@ -181,7 +182,7 @@ export function LibraryModal({ open, onOpenChange }: LibraryModalProps) {
             )}
 
             {/* snippet -> code */}
-            {contentType === "snippet" && (
+            {contentType === "SNIPPET" && (
               <Field>
                 <FieldLabel htmlFor="code" className="font-semibold text-muted-foreground">
                   Code Snippet
