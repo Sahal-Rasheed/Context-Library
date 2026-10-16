@@ -1,4 +1,4 @@
-import type { ContextItem } from "@/data";
+import type { ContextItem } from "@/types/item";
 
 import { CompactView } from "./compact-view";
 import { GridView } from "./grid-view";
