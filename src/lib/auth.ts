@@ -20,9 +20,9 @@ export const auth = betterAuth({
   // guest users
   plugins: [
     anonymous({
-      onLinkAccount: async ({ anonymousUser, newUser }) => {
+      onLinkAccount: async ({ anonymousUser: _anonymousUser, newUser: _newUser }) => {
         // https://better-auth.com/docs/plugins/anonymous#link-account
-        // perform actions like moving the cart items from anonymous user to the new user
+        // perform actions like moving the items from the anonymous user to the new user
       },
     }),
     nextCookies(),
