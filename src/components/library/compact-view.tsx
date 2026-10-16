@@ -1,8 +1,8 @@
 import { Folder } from "lucide-react";
 import Link from "next/link";
 
-import type { ContextItem } from "@/data";
 import { formatTimeAgo } from "@/lib/utils";
+import type { ContextItem } from "@/types/item";
 
 import { Badge } from "../ui/badge";
 import { SourceIndicator } from "./source-indicator";
