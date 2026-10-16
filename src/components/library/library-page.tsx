@@ -1,6 +1,6 @@
 import { Code, Link, MessageCircle, NotepadText, Image as ImageIcon } from "lucide-react";
 
-import type { ContextItemType } from "@/data";
+import type { ContextItemType } from "@/types/item";
 
 import LibraryToolbar from "./library-toolbar";
 
@@ -10,27 +10,27 @@ export const CONTENT_TYPES: {
   icon: React.ReactNode;
 }[] = [
   {
-    type: "link",
+    type: "LINK",
     name: "Link",
     icon: <Link className="size-3.5 text-muted-foreground" />,
   },
   {
-    type: "snippet",
+    type: "SNIPPET",
     name: "Snippet",
     icon: <Code className="size-3.5 text-muted-foreground" />,
   },
   {
-    type: "note",
+    type: "NOTE",
     name: "Note",
     icon: <NotepadText className="size-3.5 text-muted-foreground" />,
   },
   {
-    type: "chat",
+    type: "AI_CONVERSATION",
     name: "AI Conversation",
     icon: <MessageCircle className="size-3.5 text-muted-foreground" />,
   },
   {
-    type: "image",
+    type: "IMAGE",
     name: "Image",
     icon: <ImageIcon className="size-3.5 text-muted-foreground" />,
   },
