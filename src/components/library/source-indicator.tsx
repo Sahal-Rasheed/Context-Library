@@ -7,7 +7,7 @@ import {
   Image as ImageIcon,
 } from "lucide-react";
 
-import type { ContextItemType } from "@/data";
+import type { ContextItemType } from "@/types/item";
 
 const COLOR_VARIANTS = [
   "bg-sky-500/12 text-sky-600 border border-sky-500/20 dark:bg-sky-500/10 dark:text-sky-400 dark:border-sky-500/20",
@@ -45,7 +45,7 @@ export function SourceIndicator({
 
   let content = null;
 
-  if (type === "link" && url) {
+  if (type === "LINK" && url) {
     try {
       const hostname = new URL(url).hostname.replace("www.", "");
       if (hostname.includes("github.com")) {
@@ -56,13 +56,13 @@ export function SourceIndicator({
     } catch {
       content = <LinkIcon className="size-3.5" />;
     }
-  } else if (type === "snippet") {
+  } else if (type === "SNIPPET") {
     content = <Code className="size-3.5" />;
-  } else if (type === "note") {
+  } else if (type === "NOTE") {
     content = <NotepadText className="size-3.5" />;
-  } else if (type === "chat") {
+  } else if (type === "AI_CONVERSATION") {
     content = <MessageCircle className="size-3.5" />;
-  } else if (type === "image") {
+  } else if (type === "IMAGE") {
     content = <ImageIcon className="size-3.5" />;
   } else {
     content = <LinkIcon className="size-3.5" />;
