@@ -7,6 +7,7 @@ import * as React from "react";
 import { Badge } from "@/components/ui/badge";
 
 import { FilterDropdownMenu } from "./filter-dropdown";
+import { CONTENT_TYPES } from "./library-page";
 import { SortDropdownMenu } from "./sort-dropdown";
 import ViewSwitcher from "./view-switcher";
 
@@ -17,11 +18,11 @@ type LibraryToolbarProps = {
 };
 
 const FILTER_LABELS: Record<string, string> = {
-  link: "Link",
-  snippet: "Snippet",
-  note: "Note",
-  chat: "AI conversation",
-  image: "Image",
+  LINK: "Link",
+  SNIPPET: "Snippet",
+  NOTE: "Note",
+  AI_CONVERSATION: "AI conversation",
+  IMAGE: "Image",
 };
 
 export default function LibraryToolbar({ title, count, view }: LibraryToolbarProps) {
@@ -29,20 +30,20 @@ export default function LibraryToolbar({ title, count, view }: LibraryToolbarPro
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  // read active type filters from searchParams e.g. ?type=link,snippet
+  // read active type filters from searchParams e.g. ?type=LINK,SNIPPET
   const rawTypes = searchParams.get("type");
   const activeTypeArray = React.useMemo(() => {
-    return rawTypes ? rawTypes.split(",").filter(Boolean) : [];
+    return rawTypes
+      ? rawTypes
+          .split(",")
+          .filter(Boolean)
+          .map((t) => t.toUpperCase())
+      : [];
   }, [rawTypes]);
 
   const activeFilters = React.useMemo(() => {
-    return {
-      link: activeTypeArray.includes("link"),
-      snippet: activeTypeArray.includes("snippet"),
-      note: activeTypeArray.includes("note"),
-      chat: activeTypeArray.includes("chat"),
-      image: activeTypeArray.includes("image"),
-    };
+    const active = new Set(activeTypeArray);
+    return Object.fromEntries(CONTENT_TYPES.map((type) => [type.type, active.has(type.type)]));
   }, [activeTypeArray]);
 
   const handleFilterChange = (type: string, checked: boolean) => {
