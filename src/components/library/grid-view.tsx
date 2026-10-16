@@ -1,8 +1,8 @@
 import { Folder, Star } from "lucide-react";
 import Link from "next/link";
 
-import type { ContextItem } from "@/data";
 import { formatTimeAgo } from "@/lib/utils";
+import type { ContextItem } from "@/types/item";
 
 import { Badge } from "../ui/badge";
 import { SourceIndicator } from "./source-indicator";
@@ -19,16 +19,16 @@ export function GridView({ items }: { items: ContextItem[] }) {
 
 function GridItem({ item }: { item: ContextItem }) {
   const getSubMeta = () => {
-    if (item.type === "image") {
+    if (item.type === "IMAGE") {
       return item.meta?.len ? `Image • ${item.meta.len}` : "Image";
     }
-    if (item.type === "note") {
+    if (item.type === "NOTE") {
       return item.meta?.len ? `Note • ${item.meta.len}` : "Note";
     }
-    if (item.type === "snippet") {
+    if (item.type === "SNIPPET") {
       return item.meta?.lang ? `${item.meta.lang} • ${item.meta.len ?? ""}` : "Snippet";
     }
-    if (item.type === "chat") {
+    if (item.type === "AI_CONVERSATION") {
       return item.meta?.source ? `${item.meta.source} • ${item.meta.len ?? ""}` : "Chat";
     }
     if (item.url) {
