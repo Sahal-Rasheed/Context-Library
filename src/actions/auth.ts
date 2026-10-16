@@ -2,7 +2,7 @@
 
 import { isAPIError } from "better-auth/api";
 import { headers } from "next/headers";
-import { redirect } from "next/navigation";
+import { redirect, unstable_rethrow } from "next/navigation";
 
 import { auth } from "@/lib/auth";
 import {
@@ -143,6 +143,9 @@ export async function getCurrentSession() {
 
     return session;
   } catch (error) {
+    // used to rethrow internal Next.js errors so that they can be handled by the framework
+    unstable_rethrow(error);
+
     if (isAPIError(error)) {
       console.warn("Get session rejected:", error.status);
       return null;
@@ -151,4 +154,16 @@ export async function getCurrentSession() {
     console.error("Unexpected get session failure:", error);
     return null;
   }
+}
+
+export async function getAuthenticatedUser() {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (!session || !session.user) {
+    throw new Error("Unauthorized. Please log in first.");
+  }
+
+  return session.user;
 }
