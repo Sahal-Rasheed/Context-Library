@@ -4,7 +4,6 @@ import { getCurrentSession } from "@/actions/auth";
 import { LibraryPage } from "@/components/library/library-page";
 import { LibraryView } from "@/components/library/library-views";
 import { getItems } from "@/dal/items";
-import { toContextItem } from "@/lib/mappers";
 import type { ContextItemType } from "@/types/item";
 
 export default async function AllItemsPage({
@@ -49,8 +48,6 @@ export default async function AllItemsPage({
     query: q,
   });
 
-  const items = dbItems.map(toContextItem);
-
   // compute title
   let title = "All items";
   if (folder) {
@@ -66,8 +63,8 @@ export default async function AllItemsPage({
   }
 
   return (
-    <LibraryPage title={title} count={items.length} view={view}>
-      <LibraryView items={items} view={view} />
+    <LibraryPage title={title} count={dbItems.length} view={view}>
+      <LibraryView items={dbItems} view={view} />
     </LibraryPage>
   );
 }

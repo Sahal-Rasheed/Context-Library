@@ -1,20 +1,31 @@
 "use client";
 
 import { PenSquare } from "lucide-react";
+import { useRouter } from "next/navigation";
 import * as React from "react";
 
+import { updateContextAction } from "@/actions/items";
 import { Button } from "@/components/ui/button";
 import { formatTimeAgo } from "@/lib/utils";
 
 interface DetailContextCardProps {
-  ctx?: string;
-  ctxAt?: string;
+  itemId: string;
+  ctx?: string | null;
+  ctxAt?: string | null;
   savedAt: string;
 }
 
-export function DetailContextCard({ ctx, ctxAt, savedAt }: DetailContextCardProps) {
+export function DetailContextCard({ itemId, ctx, ctxAt, savedAt }: DetailContextCardProps) {
   const [isEditing, setIsEditing] = React.useState(false);
   const [draft, setDraft] = React.useState(ctx || "");
+  const [isPending, startTransition] = React.useTransition();
+
+  const router = useRouter();
+
+  const startEditing = React.useCallback(() => {
+    setDraft(ctx || "");
+    setIsEditing(true);
+  }, [ctx]);
 
   React.useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -25,12 +36,22 @@ export function DetailContextCard({ ctx, ctxAt, savedAt }: DetailContextCardProp
         document.activeElement?.tagName !== "TEXTAREA"
       ) {
         e.preventDefault();
-        setIsEditing(true);
+        startEditing();
       }
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, []);
+  }, [startEditing]);
+
+  const handleSave = () => {
+    startTransition(async () => {
+      const result = await updateContextAction(itemId, draft);
+      if (result.success) {
+        setIsEditing(false);
+        router.refresh();
+      }
+    });
+  };
 
   const timeLabel = formatTimeAgo(ctxAt || savedAt);
 
@@ -44,7 +65,7 @@ export function DetailContextCard({ ctx, ctxAt, savedAt }: DetailContextCardProp
           </p>
         </div>
         <Button
-          onClick={() => setIsEditing(true)}
+          onClick={startEditing}
           className="h-0 shrink-0 gap-1.5 px-3.5 py-4 text-xs font-semibold"
         >
           <PenSquare className="size-3.5" />
@@ -74,15 +95,17 @@ export function DetailContextCard({ ctx, ctxAt, savedAt }: DetailContextCardProp
         <div className="flex items-center gap-2">
           <Button
             size="sm"
-            onClick={() => setIsEditing(false)}
+            onClick={handleSave}
+            disabled={isPending}
             className="h-0 rounded-md-ds px-3.5 py-4 text-xs text-secondary transition-colors"
           >
-            Save context
+            {isPending ? "Saving..." : "Save context"}
           </Button>
           <Button
             variant="ghost"
             size="sm"
             onClick={() => setIsEditing(false)}
+            disabled={isPending}
             className="h-0 rounded-md-ds px-3.5 py-4 text-xs text-muted-foreground transition-colors hover:bg-muted-foreground/10 hover:dark:bg-muted-foreground/10"
           >
             Cancel
@@ -100,7 +123,7 @@ export function DetailContextCard({ ctx, ctxAt, savedAt }: DetailContextCardProp
           Why I saved this
         </span>
         <button
-          onClick={() => setIsEditing(true)}
+          onClick={startEditing}
           className="inline-flex cursor-pointer items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
         >
           <span>Edit</span>
@@ -111,7 +134,7 @@ export function DetailContextCard({ ctx, ctxAt, savedAt }: DetailContextCardProp
       </div>
 
       <div className="font-serif text-[17px] leading-relaxed font-normal tracking-wide text-foreground">
-        {draft}
+        {ctx}
       </div>
 
       <div className="pt-1 text-xs text-muted-foreground">Written {timeLabel}</div>

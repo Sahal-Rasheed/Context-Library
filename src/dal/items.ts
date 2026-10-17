@@ -31,6 +31,16 @@ export type ItemWithRelations = Prisma.ItemGetPayload<{
   include: typeof itemWithRelationsInclude;
 }>;
 
+export const relatedItemInclude = {
+  folder: { select: { id: true, name: true } },
+  tags: { select: { id: true, name: true } },
+  link: { select: { url: true } },
+} satisfies Prisma.ItemInclude;
+
+export type RelatedItem = Prisma.ItemGetPayload<{
+  include: typeof relatedItemInclude;
+}>;
+
 export async function getItems(userId: string, filters: ItemQueryFilters = {}) {
   const { folder, tag, section, type, sort = "latest", query } = filters;
 
@@ -131,7 +141,7 @@ export async function getRelatedItems(
     tagNames,
     limit = 3,
   }: { folderId?: string | null; tagNames?: string[]; limit?: number },
-): Promise<ItemWithRelations[]> {
+): Promise<RelatedItem[]> {
   const or: Prisma.ItemWhereInput[] = [];
 
   if (folderId) {
@@ -152,7 +162,11 @@ export async function getRelatedItems(
     },
     orderBy: { createdAt: "desc" },
     take: limit,
-    include: itemWithRelationsInclude,
+    include: {
+      folder: { select: { id: true, name: true } },
+      tags: { select: { id: true, name: true } },
+      link: { select: { url: true } },
+    },
   });
 }
 

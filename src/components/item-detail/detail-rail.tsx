@@ -1,28 +1,15 @@
 import Link from "next/link";
 
 import { SourceIndicator } from "@/components/library/source-indicator";
-import type { ContextItem } from "@/data";
-import { contextItems } from "@/data";
+import type { ItemWithRelations, RelatedItem } from "@/dal/items";
 
 interface DetailRailProps {
-  item: ContextItem;
+  item: ItemWithRelations;
+  related: RelatedItem[];
 }
 
-export function DetailRail({ item }: DetailRailProps) {
-  // const connectedItems = (item.connectedIds || [])
-  //   .map((id) => contextItems.find((i) => i.id === id))
-  //   .filter(Boolean) as ContextItem[];
-
-  const relatedItems = contextItems
-    .filter((i) => i.id !== item.id)
-    .filter((i) => {
-      const shareTag = i.tags.some((t) => item.tags.includes(t));
-      const sameFolder = item.folder && i.folder === item.folder;
-      return shareTag || sameFolder;
-    })
-    .slice(0, 3);
-
-  const savedDateStr = new Date(item.savedAt).toLocaleDateString("en-US", {
+export function DetailRail({ item, related }: DetailRailProps) {
+  const savedDateStr = new Date(item.createdAt.toISOString()).toLocaleDateString("en-US", {
     month: "short",
     day: "numeric",
     year: "numeric",
@@ -39,35 +26,44 @@ export function DetailRail({ item }: DetailRailProps) {
           <dt className="text-muted-foreground">Content</dt>
           <dd className="font-medium text-foreground capitalize">{item.type}</dd>
 
-          {item.meta?.site && (
+          {item.link?.url && (
             <>
               <dt className="text-muted-foreground">Site</dt>
-              <dd className="truncate font-mono font-medium text-foreground">{item.meta.site}</dd>
+              <dd className="truncate font-mono font-medium text-foreground">
+                {new URL(item.link.url).hostname.replace("www.", "")}
+              </dd>
             </>
           )}
 
-          {item.meta?.author && (
+          {item.link?.author && (
             <>
               <dt className="text-muted-foreground">Author</dt>
-              <dd className="font-medium text-foreground">{item.meta.author}</dd>
+              <dd className="font-medium text-foreground">{item.link.author}</dd>
             </>
           )}
 
-          {item.meta?.len && (
+          {item.snippet?.language && (
             <>
-              <dt className="text-muted-foreground">Length</dt>
-              <dd className="font-medium text-foreground">{item.meta.len}</dd>
+              <dt className="text-muted-foreground">Language</dt>
+              <dd className="font-medium text-foreground">{item.snippet.language}</dd>
+            </>
+          )}
+
+          {item.conversation?.provider && (
+            <>
+              <dt className="text-muted-foreground">Source</dt>
+              <dd className="font-medium text-foreground">{item.conversation.provider}</dd>
             </>
           )}
 
           <dt className="text-muted-foreground">Saved</dt>
           <dd className="font-medium text-foreground">{savedDateStr}</dd>
 
-          <dt className="text-muted-foreground">Attachments</dt>
-          <dd className="font-medium text-foreground">{item.attach ? item.attach.length : 0}</dd>
+          {/*<dt className="text-muted-foreground">Attachments</dt>
+          <dd className="font-medium text-foreground">{item.attach ? item.attach.length : 0}</dd>*/}
 
           <dt className="text-muted-foreground">Location</dt>
-          <dd className="font-medium text-foreground capitalize">{item.folder || "Inbox"}</dd>
+          <dd className="font-medium text-foreground capitalize">{item.folder?.name || "Inbox"}</dd>
         </dl>
       </section>
 
@@ -184,8 +180,14 @@ export function DetailRail({ item }: DetailRailProps) {
         </div>
 
         <div className="space-y-3">
-          {relatedItems.map((rel) => {
-            const sharedTags = rel.tags.filter((t) => item.tags.includes(t));
+          {related.length === 0 && (
+            <p className="text-xs-ds text-muted-foreground italic">No related items yet.</p>
+          )}
+
+          {related.map((rel) => {
+            const sharedTags = rel.tags.filter(({ name }) =>
+              item.tags.map((t) => t.name).includes(name),
+            );
             return (
               <Link
                 key={rel.id}
@@ -195,7 +197,7 @@ export function DetailRail({ item }: DetailRailProps) {
                 <SourceIndicator
                   title={rel.title}
                   type={rel.type}
-                  url={rel.url}
+                  url={rel.link?.url}
                   className="mt-0.5 size-5 text-[10px]"
                 />
                 <div className="min-w-0 flex-1">
@@ -204,8 +206,8 @@ export function DetailRail({ item }: DetailRailProps) {
                   </p>
                   <p className="truncate text-xs-ds text-muted-foreground">
                     {sharedTags.length > 0
-                      ? `Shares ${sharedTags.map((t) => `#${t}`).join(" ")}`
-                      : `Same folder (${rel.folder})`}
+                      ? `Shares ${sharedTags.map((t) => `#${t.name}`).join(" ")}`
+                      : `Same folder (${rel.folder?.name})`}
                   </p>
                 </div>
               </Link>

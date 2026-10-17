@@ -1,13 +1,13 @@
 import { Folder, Star } from "lucide-react";
 import Link from "next/link";
 
+import type { ItemWithRelations } from "@/dal/items";
 import { formatTimeAgo } from "@/lib/utils";
-import type { ContextItem } from "@/types/item";
 
 import { Badge } from "../ui/badge";
 import { SourceIndicator } from "./source-indicator";
 
-export function GridView({ items }: { items: ContextItem[] }) {
+export function GridView({ items }: { items: ItemWithRelations[] }) {
   return (
     <div className="mt-2 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
       {items.map((item) => (
@@ -17,25 +17,26 @@ export function GridView({ items }: { items: ContextItem[] }) {
   );
 }
 
-function GridItem({ item }: { item: ContextItem }) {
+function GridItem({ item }: { item: ItemWithRelations }) {
   const getSubMeta = () => {
-    if (item.type === "IMAGE") {
-      return item.meta?.len ? `Image • ${item.meta.len}` : "Image";
-    }
+    // if (item.type === "IMAGE") {
+    //   return item.meta?.len ? `Image • ${item.meta.len}` : "Image";
+    // }
     if (item.type === "NOTE") {
-      return item.meta?.len ? `Note • ${item.meta.len}` : "Note";
+      // return item.meta?.len ? `Note • ${item.meta.len}` : "Note";
+      return "Note";
     }
     if (item.type === "SNIPPET") {
-      return item.meta?.lang ? `${item.meta.lang} • ${item.meta.len ?? ""}` : "Snippet";
+      return item.snippet?.language ? `Snippet • ${item.snippet.language}` : "Snippet";
     }
     if (item.type === "AI_CONVERSATION") {
-      return item.meta?.source ? `${item.meta.source} • ${item.meta.len ?? ""}` : "Chat";
+      return item.conversation?.provider ? `Chat • ${item.conversation.provider}` : "Chat";
     }
-    if (item.url) {
+    if (item.link?.url) {
       try {
-        return new URL(item.url).hostname.replace("www.", "");
+        return new URL(item.link.url).hostname.replace("www.", "");
       } catch {
-        return item.url;
+        return item.link.url;
       }
     }
     return item.type;
@@ -56,7 +57,7 @@ function GridItem({ item }: { item: ContextItem }) {
             <SourceIndicator
               title={item.title}
               type={item.type}
-              url={item.url}
+              url={item.link?.url}
               className="size-5.5"
             />
             <span className="truncate font-mono text-xs text-muted-foreground">{getSubMeta()}</span>
@@ -64,8 +65,8 @@ function GridItem({ item }: { item: ContextItem }) {
 
           {/* favorite */}
           <div className="shrink-0 text-muted-foreground">
-            {item.fav && <Star className="size-3.5 fill-foreground text-foreground" />}
-            {!item.fav && (
+            {item.isFavorite && <Star className="size-3.5 fill-foreground text-foreground" />}
+            {!item.isFavorite && (
               <Star className="size-3.5 opacity-0 transition-opacity group-hover:opacity-40" />
             )}
           </div>
@@ -75,14 +76,14 @@ function GridItem({ item }: { item: ContextItem }) {
         <h2 className="line-clamp-1 text-md-ds font-semibold text-foreground">{item.title}</h2>
 
         {/* desc */}
-        <p className="line-clamp-2 text-md-ds text-muted-foreground" title={item.desc}>
-          {item.desc}
+        <p className="line-clamp-2 text-md-ds text-muted-foreground">
+          {item.description || "No description available."}
         </p>
 
         {/* ctx */}
-        {item.ctx && (
+        {item.context && (
           <div className="line-clamp-4 bg-linear-to-r from-amber-500/15 via-amber-700/10 to-transparent px-1.5 py-0.5 font-serif text-lg-sm-ds font-medium tracking-wide text-foreground shadow-[inset_2px_0px_0px_#B8931A]">
-            {item.ctx}
+            {item.context}
           </div>
         )}
       </div>
@@ -97,7 +98,7 @@ function GridItem({ item }: { item: ContextItem }) {
               className="flex items-center gap-1 rounded-sm-ds border border-border bg-background text-xs whitespace-nowrap text-muted-foreground capitalize"
             >
               <Folder className="size-3" />
-              {item.folder}
+              {item.folder.name}
             </Badge>
           )}
 
@@ -108,7 +109,7 @@ function GridItem({ item }: { item: ContextItem }) {
               variant="secondary"
               className="rounded-sm-ds bg-neutral-400/10 text-xs-ds whitespace-nowrap text-muted-foreground hover:bg-neutral-400/40 hover:text-foreground dark:bg-black/75 dark:hover:bg-muted"
             >
-              #{tag}
+              #{tag.name}
             </Badge>
           ))}
 
@@ -120,7 +121,7 @@ function GridItem({ item }: { item: ContextItem }) {
 
         {/* time */}
         <div className="shrink-0 self-end pb-0.5 text-xs text-muted-foreground">
-          <span className="whitespace-nowrap">{formatTimeAgo(item.savedAt)}</span>
+          <span className="whitespace-nowrap">{formatTimeAgo(item.createdAt.toISOString())}</span>
         </div>
       </div>
     </Link>

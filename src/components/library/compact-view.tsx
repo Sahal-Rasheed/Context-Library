@@ -1,13 +1,13 @@
 import { Folder } from "lucide-react";
 import Link from "next/link";
 
+import type { ItemWithRelations } from "@/dal/items";
 import { formatTimeAgo } from "@/lib/utils";
-import type { ContextItem } from "@/types/item";
 
 import { Badge } from "../ui/badge";
 import { SourceIndicator } from "./source-indicator";
 
-export function CompactView({ items }: { items: ContextItem[] }) {
+export function CompactView({ items }: { items: ItemWithRelations[] }) {
   return (
     <div className="divide-y divide-sidebar-border">
       {items.map((item) => (
@@ -19,7 +19,7 @@ export function CompactView({ items }: { items: ContextItem[] }) {
   );
 }
 
-function CompactItem({ item }: { item: ContextItem }) {
+function CompactItem({ item }: { item: ItemWithRelations }) {
   const extraTagsCount = item.tags.length > 3 ? item.tags.length - 3 : 0;
 
   return (
@@ -29,7 +29,7 @@ function CompactItem({ item }: { item: ContextItem }) {
         <SourceIndicator
           title={item.title}
           type={item.type}
-          url={item.url}
+          url={item.link?.url}
           className="size-5 text-[10px]"
         />
         <span className="truncate text-md-ds font-semibold text-foreground group-hover:text-primary">
@@ -39,9 +39,9 @@ function CompactItem({ item }: { item: ContextItem }) {
 
       {/* url host */}
       <div className="hidden min-w-0 lg:block">
-        {item.url ? (
+        {item.link?.url ? (
           <span className="block truncate font-mono text-xs text-muted-foreground">
-            {new URL(item.url).hostname.replace("www.", "")}
+            {new URL(item.link.url).hostname.replace("www.", "")}
           </span>
         ) : (
           <span className="text-xs text-muted-foreground">N/A</span>
@@ -56,7 +56,7 @@ function CompactItem({ item }: { item: ContextItem }) {
             className="inline-flex items-center gap-1 rounded-sm-ds border border-border bg-background py-0.5 text-xs-ds text-muted-foreground capitalize"
           >
             <Folder className="size-3" />
-            {item.folder}
+            {item.folder.name}
           </Badge>
         )}
       </div>
@@ -69,7 +69,7 @@ function CompactItem({ item }: { item: ContextItem }) {
             variant="secondary"
             className="rounded-sm-ds bg-neutral-400/10 py-0.5 text-xs-ds whitespace-nowrap text-muted-foreground dark:bg-black/75"
           >
-            #{tag}
+            #{tag.name}
           </Badge>
         ))}
 
@@ -80,7 +80,7 @@ function CompactItem({ item }: { item: ContextItem }) {
 
       {/* time */}
       <div className="text-xs text-muted-foreground lg:text-right">
-        <span className="whitespace-nowrap">{formatTimeAgo(item.savedAt)}</span>
+        <span className="whitespace-nowrap">{formatTimeAgo(item.createdAt.toISOString())}</span>
       </div>
     </div>
   );

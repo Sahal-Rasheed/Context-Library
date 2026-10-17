@@ -1,4 +1,4 @@
-import type { ContextItem } from "@/types/item";
+import type { ItemWithRelations } from "@/dal/items";
 
 import { CompactView } from "./compact-view";
 import { GridView } from "./grid-view";
@@ -6,7 +6,7 @@ import { ListView } from "./list-view";
 
 interface LibraryViewProps {
   view: "grid" | "list" | "compact";
-  items: ContextItem[];
+  items: ItemWithRelations[];
 }
 
 export function LibraryView({ view, items }: LibraryViewProps) {

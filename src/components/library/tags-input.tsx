@@ -21,7 +21,7 @@ export function TagsInput({
   onChange,
   placeholder = "Add tags (comma separated)",
   className,
-  disabled = false,
+  disabled,
 }: TagsInputProps) {
   const [inputValue, setInputValue] = React.useState("");
 
